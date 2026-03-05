@@ -1,0 +1,46 @@
+// lib/api/products.ts
+export async function getProducts(params: ProductQuery) {
+  return client.get<ProductsResponse>('/products', { params });
+}
+```
+
+**`store/` (Zustand)** — cart lives entirely in client state (persisted to localStorage). Auth token also lives here. Server state (products, orders) is handled by React Query or SWR.
+
+**`middleware.ts`** — checks for auth token, redirects `/account/*` and `/checkout` to `/auth/login` if unauthenticated.
+
+---
+
+## Key Technical Decisions
+
+| Concern | Recommended choice |
+|---|---|
+| Data fetching (server) | Native `fetch` in Server Components |
+| Data fetching (client) | React Query (`@tanstack/react-query`) |
+| Client state | Zustand |
+| Forms | React Hook Form + Zod |
+| Styling | Tailwind CSS |
+| Payments | Stripe.js / Elements |
+| Auth | JWT in httpOnly cookie via Express, or NextAuth |
+| Images | `next/image` with your Express domain whitelisted |
+
+---
+
+## Express API Contract (what your frontend expects)
+
+Your Express backend should expose at minimum:
+```
+GET    /products              ?page, limit, category, sort, search
+GET    /products/:slug
+GET    /categories
+POST   /auth/login
+POST   /auth/register
+POST   /auth/refresh
+GET    /cart                  (auth)
+POST   /cart/items            (auth)
+PATCH  /cart/items/:id        (auth)
+DELETE /cart/items/:id        (auth)
+POST   /orders                (auth)
+GET    /orders                (auth)
+GET    /orders/:id            (auth)
+GET    /users/me              (auth)
+PATCH  /users/me              (auth)
