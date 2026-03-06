@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCartStore } from '@/lib/store';
+import { useCartStore } from '@/store/useCartStore';
 import { Product } from '@/types';
 
 export function AddToCartButton({ product }: { product: Product }) {

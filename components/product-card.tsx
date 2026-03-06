@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Product } from '@/types';
 import { Button } from './ui/button';
-import { useCartStore } from '@/lib/store';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { useCartStore } from '@/store/useCartStore';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const addToCart = useCartStore((state) => state.addToCart);
+  const addToCart = useCartStore((state: any) => state.addToCart);
 
   return (
     <Card className="overflow-hidden flex flex-col h-full">
@@ -31,7 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </Link>
         <CardDescription className="line-clamp-2">{product.description}</CardDescription>
       </CardHeader>
-      <CardContent className="p-4 pt-0 flex-grow">
+      <CardContent className="p-4 pt-0 grow">
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold">${product.price.toFixed(2)}</span>
           <span className="text-sm text-muted-foreground">{product.category}</span>

@@ -1,17 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Menu } from 'lucide-react';
-import { useCartStore } from '@/lib/store';
+import { ShoppingCart, Menu, User } from 'lucide-react';
+import { useCartStore } from '@/store/useCartStore';
+import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from './ui/button';
 import { useState } from 'react';
 
 export function Header() {
   const cartCount = useCartStore((state) => state.getCartCount());
+  const { user, logout } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center space-x-2">
           <span className="text-xl font-bold">ShopIt</span>
@@ -39,6 +41,25 @@ export function Header() {
               <span className="sr-only">Cart</span>
             </Button>
           </Link>
+          
+          {user ? (
+            <div className="hidden md:flex items-center gap-4">
+              <Link href="/account/profile">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <User className="h-4 w-4" />
+                  {user.name}
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" onClick={logout}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Link href="/auth/login" className="hidden md:block">
+              <Button size="sm">Login</Button>
+            </Link>
+          )}
+
           <Button
             variant="ghost"
             size="icon"
@@ -74,6 +95,15 @@ export function Header() {
             >
               About
             </Link>
+            {!user && (
+              <Link
+                href="/auth/login"
+                className="text-sm font-medium hover:underline underline-offset-4"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       )}
