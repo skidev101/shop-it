@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { getProducts } from '@/lib/api';
-import { ProductCard } from '@/components/product-card';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { getProducts } from "@/lib/api";
+import { ProductCard } from "@/components/product-card";
 
 export default async function Home() {
   const products = await getProducts();
@@ -19,7 +19,8 @@ export default async function Home() {
                   Discover Quality Products for Your Lifestyle
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Shop the latest trends in electronics, fashion, and home goods. Experience seamless shopping with ShopIt.
+                  Shop the latest trends in electronics, fashion, and home
+                  goods. Experience seamless shopping with ShopIt.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -29,7 +30,11 @@ export default async function Home() {
                   </Button>
                 </Link>
                 <Link href="/about">
-                  <Button variant="outline" size="lg" className="w-full min-[400px]:w-auto">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full min-[400px]:w-auto"
+                  >
                     Learn More
                   </Button>
                 </Link>
@@ -37,11 +42,11 @@ export default async function Home() {
             </div>
             {/* Placeholder for Hero Image - using a div for now or an image if available */}
             <div className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last">
-               <img
-                  alt="Hero"
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80"
-                />
+              <img
+                alt="Hero"
+                className="w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80"
+              />
             </div>
           </div>
         </div>
@@ -50,7 +55,9 @@ export default async function Home() {
       {/* Featured Products */}
       <section className="container px-4 md:px-6 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold tracking-tight">Featured Products</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Featured Products
+          </h2>
           <Link href="/products">
             <Button variant="ghost">View All &rarr;</Button>
           </Link>
@@ -69,7 +76,8 @@ export default async function Home() {
             Join the ShopIt Community
           </h2>
           <p className="max-w-[600px] text-primary-foreground/80 md:text-xl">
-            Sign up for our newsletter to get exclusive deals, new arrivals, and more.
+            Sign up for our newsletter to get exclusive deals, new arrivals, and
+            more.
           </p>
           <div className="w-full max-w-sm space-y-2">
             <form className="flex space-x-2">

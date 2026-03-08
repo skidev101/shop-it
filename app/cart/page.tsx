@@ -4,12 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCartStore } from '@/lib/store';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/hooks/use-cart';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, getCartTotal } = useCartStore();
-  const total = getCartTotal();
+  const { items, updateQuantity, removeFromCart, cartTotal } = useCart();
+
 
   if (items.length === 0) {
     return (
@@ -32,7 +32,7 @@ export default function CartPage() {
           {items.map((item) => (
             <Card key={item.id}>
               <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-center">
-                <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border">
+                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -88,7 +88,7 @@ export default function CartPage() {
               <h2 className="text-xl font-bold">Order Summary</h2>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${cartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Shipping</span>
@@ -96,7 +96,7 @@ export default function CartPage() {
               </div>
               <div className="border-t pt-4 flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${cartTotal.toFixed(2)}</span>
               </div>
               <Button className="w-full" size="lg">
                 Proceed to Checkout

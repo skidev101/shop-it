@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { ShoppingCart, Menu, User } from 'lucide-react';
-import { useCartStore } from '@/store/useCartStore';
-import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from './ui/button';
 import { useState } from 'react';
+import { useCart } from '@/hooks/use-cart';
 
 export function Header() {
-  const cartCount = useCartStore((state) => state.getCartCount());
-  const { user, logout } = useAuthStore();
+  const { cartCount } = useCart();
+  // const { user, logout } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -42,7 +41,7 @@ export function Header() {
             </Button>
           </Link>
           
-          {user ? (
+          {/* {user ? (
             <div className="hidden md:flex items-center gap-4">
               <Link href="/account/profile">
                 <Button variant="ghost" size="sm" className="gap-2">
@@ -58,7 +57,7 @@ export function Header() {
             <Link href="/auth/login" className="hidden md:block">
               <Button size="sm">Login</Button>
             </Link>
-          )}
+          )} */}
 
           <Button
             variant="ghost"
@@ -95,7 +94,7 @@ export function Header() {
             >
               About
             </Link>
-            {!user && (
+            {/* {!user && (
               <Link
                 href="/auth/login"
                 className="text-sm font-medium hover:underline underline-offset-4"
@@ -103,7 +102,7 @@ export function Header() {
               >
                 Login
               </Link>
-            )}
+            )} */}
           </nav>
         </div>
       )}

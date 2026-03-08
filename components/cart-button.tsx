@@ -2,11 +2,12 @@
 
 import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCartStore } from '@/store/useCartStore';
 import { Product } from '@/types';
+import { useCart } from '@/hooks/use-cart';
+import { CartItem } from '@/contexts/cart-context';
 
-export function AddToCartButton({ product }: { product: Product }) {
-  const addToCart = useCartStore((state) => state.addToCart);
+export function AddToCartButton({ product }: { product: CartItem }) {
+  const {addToCart} = useCart();
 
   return (
     <Button size="lg" className="w-full sm:w-auto" onClick={() => addToCart(product)}>

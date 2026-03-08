@@ -1,7 +1,7 @@
 import client from './client';
 import { Product, ProductQuery, ProductsResponse } from '@/types';
 
-export async function getProducts(params: ProductQuery) {
+export async function fetchProducts(params: ProductQuery) {
   const { data } = await client.get<ProductsResponse>('/products', { params });
   return data;
 }
