@@ -1,5 +1,5 @@
 import client from './client';
-import { AuthResponse, User } from '@/types';
+import { AuthResponse, User } from '@/types/user';
 
 export async function login(credentials: any) {
   const { data } = await client.post<AuthResponse>('/auth/login', credentials);

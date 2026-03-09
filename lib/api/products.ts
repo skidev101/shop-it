@@ -1,8 +1,8 @@
 import client from './client';
-import { Product, ProductQuery, ProductsResponse } from '@/types';
+import { Product, ProductQuery } from '@/types/product';
 
 export async function fetchProducts(params: ProductQuery) {
-  const { data } = await client.get<ProductsResponse>('/products', { params });
+  const { data } = await client.get<any>('/products', { params });
   return data;
 }
 
