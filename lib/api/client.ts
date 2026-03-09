@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { refresh } from './auth';
-import { useAuthStore } from '@/stores/auth-store';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,13 +11,6 @@ const client = axios.create({
   withCredentials: true
 });
 
-// client.interceptors.request.use((config) => {
-//   const token = useAuthStore.getState().accessToken;
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
 
 
 client.interceptors.response.use(
