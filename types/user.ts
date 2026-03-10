@@ -17,7 +17,3 @@ export interface User {
   updatedAt: Date;
 }
 
-
-export interface AuthResponse {
-    user: User;
-}

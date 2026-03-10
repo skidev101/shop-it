@@ -1,21 +1,33 @@
-'use client';
+"use client";
 
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/components/ui/input-otp';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/ui/input-otp";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field';
-import client from '@/lib/api/client';
+} from "@/components/ui/field";
+import client from "@/lib/api/client";
+import { verifyOtp } from "@/lib/api/auth";
 
 const otpSchema = z.object({
   pin: z.string().length(6, "Enter all 6 digits"),
@@ -24,28 +36,33 @@ const otpSchema = z.object({
 export default function VerifyOtpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  const email = searchParams.get("email");
 
-  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
     resolver: zodResolver(otpSchema),
     defaultValues: { pin: "" },
   });
 
   const onSubmit = async (data: { pin: string }) => {
     try {
-      await client.post('/auth/verify-otp', {
-        email,
-        otp: data.pin,
-      });
-      toast.success('Account verified!');
-      router.push('/auth/login');
+      const response = await verifyOtp({ email: email!, otp: data.pin });
+      console.log("OTP verification response:", response);
+
+      if (response.success) {
+        toast.success("Account verified!");
+        router.push("/auth/login");
+      }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Invalid OTP');
+      toast.error(error.response?.data?.message || "Invalid OTP");
     }
   };
 
   if (!email) {
-    router.push('/auth/login');
+    router.push("/auth/login");
     return null;
   }
 
@@ -55,7 +72,8 @@ export default function VerifyOtpPage() {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Verify Email</CardTitle>
           <CardDescription>
-            Enter the code sent to <span className="font-medium text-primary">{email}</span>
+            Enter the code sent to{" "}
+            <span className="font-medium text-primary">{email}</span>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,13 +81,13 @@ export default function VerifyOtpPage() {
             <FieldGroup className="flex flex-col items-center space-y-6">
               <Field className="flex flex-col items-center gap-4">
                 <FieldLabel className="sr-only">One-Time Password</FieldLabel>
-                
+
                 <Controller
                   control={control}
                   name="pin"
                   render={({ field }) => (
-                    <InputOTP 
-                      maxLength={6} 
+                    <InputOTP
+                      maxLength={6}
                       onComplete={() => handleSubmit(onSubmit)()}
                       {...field}
                     >
@@ -95,14 +113,18 @@ export default function VerifyOtpPage() {
                     {errors.pin.message}
                   </p>
                 )}
-                
+
                 <FieldDescription>
                   The code expires in 10 minutes.
                 </FieldDescription>
               </Field>
 
-              <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
-                {isSubmitting ? 'Verifying...' : 'Verify & Continue'}
+              <Button
+                type="submit"
+                className="w-full h-11"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Verifying..." : "Verify & Continue"}
               </Button>
             </FieldGroup>
           </form>

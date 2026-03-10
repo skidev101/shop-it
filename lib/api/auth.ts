@@ -1,18 +1,19 @@
 import client from './client';
-import { AuthResponse, User } from '@/types/user';
+import { User } from '@/types/user';
+import { AuthResponse, OtpResponse, OtpVerificationData } from '@/types/auth';
 
-export async function login(credentials: any) {
-  const { data } = await client.post<AuthResponse>('/auth/login', credentials);
+export async function login(loginData: any) {
+  const { data } = await client.post<AuthResponse>('/auth/login', loginData);
   return data;
 }
 
-export async function register(userData: any) {
-  const { data } = await client.post<AuthResponse>('/auth/register', userData);
+export async function register(registerData: any) {
+  const { data } = await client.post<AuthResponse>('/auth/register', registerData);
   return data;
 }
 
-export async function verifyOtp(pin: string, email: string) {
-  const { data } = await client.post<AuthResponse>('/auth/verify-otp', { otp: pin, email });
+export async function verifyOtp(otpData: OtpVerificationData) {
+  const { data } = await client.post<OtpResponse>('/auth/verify-otp', otpData);
   return data;
 }
 
