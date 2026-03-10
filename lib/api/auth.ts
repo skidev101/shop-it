@@ -11,6 +11,11 @@ export async function register(userData: any) {
   return data;
 }
 
+export async function verifyOtp(pin: string, email: string) {
+  const { data } = await client.post<AuthResponse>('/auth/verify-otp', { otp: pin, email });
+  return data;
+}
+
 export async function refresh() {
   const { data } = await client.post<AuthResponse>('/auth/refresh');
   return data;

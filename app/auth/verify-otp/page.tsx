@@ -1,90 +1,111 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/components/ui/input-otp';
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 import client from '@/lib/api/client';
-import { toast } from 'sonner'; 
 
 const otpSchema = z.object({
-  otp: z.string().length(6, 'OTP must be exactly 6 digits'),
+  pin: z.string().length(6, "Enter all 6 digits"),
 });
-
-type OtpForm = z.infer<typeof otpSchema>;
 
 export default function VerifyOtpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<OtpForm>({
+  const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(otpSchema),
+    defaultValues: { pin: "" },
   });
 
-  // Redirect if no email is found in URL
+  const onSubmit = async (data: { pin: string }) => {
+    try {
+      await client.post('/auth/verify-otp', {
+        email,
+        otp: data.pin,
+      });
+      toast.success('Account verified!');
+      router.push('/auth/login');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Invalid OTP');
+    }
+  };
+
   if (!email) {
     router.push('/auth/login');
     return null;
   }
 
-  const onSubmit = async (data: OtpForm) => {
-    try {
-      await client.post('/auth/verify-otp', {
-        email,
-        otp: data.otp,
-      });
-
-      toast.success('Verification successful!');
-      router.push('/auth/login'); // Or straight to dashboard if auto-logging in
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Verification failed');
-    }
-  };
-
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Verify your Email</CardTitle>
-          <CardDescription className="text-center">
-            Enter the 6-digit code sent to <span className="font-semibold">{email}</span>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">Verify Email</CardTitle>
+          <CardDescription>
+            Enter the code sent to <span className="font-medium text-primary">{email}</span>
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                {...register('otp')}
-                placeholder="000000"
-                className="text-center text-2xl tracking-[0.5em] font-bold"
-                maxLength={6}
-              />
-              {errors.otp && (
-                <p className="text-sm text-center text-red-500">{errors.otp.message}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? 'Verifying...' : 'Verify OTP'}
-            </Button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FieldGroup className="flex flex-col items-center space-y-6">
+              <Field className="flex flex-col items-center gap-4">
+                <FieldLabel className="sr-only">One-Time Password</FieldLabel>
+                
+                <Controller
+                  control={control}
+                  name="pin"
+                  render={({ field }) => (
+                    <InputOTP 
+                      maxLength={6} 
+                      onComplete={() => handleSubmit(onSubmit)()}
+                      {...field}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  )}
+                />
+
+                {/* In 2026 docs, validation messages are typically handled via FieldDescription 
+                    with conditional styling or a simple custom message component */}
+                {errors.pin && (
+                  <p className="text-sm font-medium text-destructive">
+                    {errors.pin.message}
+                  </p>
+                )}
+                
+                <FieldDescription>
+                  The code expires in 10 minutes.
+                </FieldDescription>
+              </Field>
+
+              <Button type="submit" className="w-full h-11" disabled={isSubmitting}>
+                {isSubmitting ? 'Verifying...' : 'Verify & Continue'}
+              </Button>
+            </FieldGroup>
           </form>
-          
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            Didn&apos;t receive a code?{' '}
-            <button 
-              onClick={() => {/* Call your resend API */}}
-              className="text-blue-600 hover:underline font-medium"
-            >
-              Resend
-            </button>
-          </div>
         </CardContent>
       </Card>
     </div>
