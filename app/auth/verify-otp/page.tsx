@@ -57,7 +57,10 @@ export default function VerifyOtpPage() {
         router.push("/auth/login");
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Invalid OTP");
+      toast.info("Please verify your email to continue.");
+      // Redirect to OTP page and pass the email so the user doesn't have to type it
+      router.push(`/auth/verify-otp?email=${encodeURIComponent(email!)}`);
+      return;
     }
   };
 
@@ -106,8 +109,7 @@ export default function VerifyOtpPage() {
                   )}
                 />
 
-                {/* In 2026 docs, validation messages are typically handled via FieldDescription 
-                    with conditional styling or a simple custom message component */}
+               
                 {errors.pin && (
                   <p className="text-sm font-medium text-destructive">
                     {errors.pin.message}
