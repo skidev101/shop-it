@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getProducts } from "@/lib/api";
 import { ProductCard } from "@/components/product-card";
 
 export default async function Home() {
-  const products = await getProducts();
-  const featuredProducts = products.slice(0, 4);
+  // const products = await getProducts();
+  // const featuredProducts = products.slice(0, 4);
 
   return (
     <div className="flex flex-col gap-8 pb-10">
@@ -63,9 +62,9 @@ export default async function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product) => (
+          {/* {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
-          ))}
+          ))} */}
         </div>
       </section>
 

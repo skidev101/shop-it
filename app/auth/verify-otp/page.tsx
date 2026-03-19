@@ -64,10 +64,10 @@ export default function VerifyOtpPage() {
     }
   };
 
-  if (!email) {
-    router.push("/auth/login");
-    return null;
-  }
+  // if (!email) {
+  //   router.push("/auth/login");
+  //   return null;
+  // }
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">

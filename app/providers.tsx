@@ -21,5 +21,3 @@ export default function Providers({ children }: { children: ReactNode }) {
     </QueryClientProvider>
   );
 }
-
-("use client");

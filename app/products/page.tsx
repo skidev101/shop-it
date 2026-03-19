@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/lib/api/products";
+// import { getProducts } from "@/lib/api/products";
 import { ProductCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -9,10 +9,10 @@ import { useState } from "react";
 export default function ProductsPage() {
   const [search, setSearch] = useState("");
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["products", { search }],
-    queryFn: () => getProducts({ search }),
-  });
+  // const { data, isLoading, error } = useQuery({
+  //   queryKey: ["products", { search }],
+  //   queryFn: () => getProducts({ search }),
+  // });
 
   if (error)
     return <div className="text-center p-8">Error loading products</div>;
@@ -40,9 +40,9 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {data?.products.map((product) => (
+          {/* {data?.products.map((product) => (
             <ProductCard key={product.id} product={product} />
-          ))}
+          ))} */}
         </div>
       )}
     </div>
