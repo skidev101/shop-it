@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useAuthStore } from '@/store/useAuthStore';
+// import { useAuthStore } from '@/store/useAuthStore';
 import { register as registerUser } from '@/lib/api/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  // const setAuth = useAuthStore((state) => state.setAuth);
   
   const {
     register: registerField,
@@ -35,15 +35,15 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterForm) => {
-    try {
-      const response = await registerUser(data);
-      setAuth(response.user, response.token);
-      router.push('/');
-    } catch (error) {
-      console.error('Registration failed:', error);
-    }
-  };
+  // const onSubmit = async (data: RegisterForm) => {
+  //   try {
+  //     const response = await registerUser(data);
+  //     setAuth(response.user, response.token);
+  //     router.push('/');
+  //   } catch (error) {
+  //     console.error('Registration failed:', error);
+  //   }
+  // };
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
@@ -52,7 +52,7 @@ export default function RegisterPage() {
           <CardTitle className="text-2xl text-center">Create an Account</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Name</label>
               <Input
