@@ -1,87 +1,149 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { login } from '@/lib/api/auth';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Compass, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
-
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
 
-  const {
-    register: registerField,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const onSubmit = async (data: LoginForm) => {
-    try {
-      const response = await login(data);
-      setUser(response.user);
-      router.push('/');
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Mock login delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    toast.success('Successfully signed in!', {
+        description: `Welcome back to the Merchant Atlas.`,
+    });
+    
+    setLoading(false);
+    router.push('/');
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Login to ShopIt</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
-              <Input
-                {...registerField('email')}
-                placeholder="name@example.com"
-                type="email"
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Password</label>
-              <Input
-                {...registerField('password')}
-                type="password"
-                placeholder="••••••••"
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? 'Logging in...' : 'Login'}
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/auth/register" className="text-blue-600 hover:underline">
-              Register
-            </Link>
+    <div className="w-full max-w-120 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="h-12 w-12 bg-[#3D4D6B] rounded-xl flex items-center justify-center shadow-lg">
+          <Compass className="h-6 w-6 text-white" />
+        </div>
+        <div className="text-center space-y-1">
+          <h2 className="text-2xl font-black text-[#1A1A1A] uppercase tracking-tighter">
+            MERCHANT ATLAS
+          </h2>
+          <p className="text-sm text-[#666666]">Sign in to your account</p>
+        </div>
+      </div>
+
+      <div className="bg-white p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50">
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-[10px] font-black text-[#666666] uppercase tracking-widest pl-1">
+              Email Address
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="name@company.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-14 rounded-xl border-[#E5E5E5] focus-visible:ring-[#3D4D6B]/5 focus-visible:border-[#3D4D6B] px-5 bg-[#F9FAFB]/30"
+            />
           </div>
-        </CardContent>
-      </Card>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-1">
+              <Label htmlFor="password" className="text-[10px] font-black text-[#666666] uppercase tracking-widest">
+                Password
+              </Label>
+              <Link
+                href="/auth/reset-password"
+                className="text-[10px] font-bold text-[#666666] hover:text-[#3D4D6B] transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-14 rounded-xl border-[#E5E5E5] focus-visible:ring-[#3D4D6B]/5 focus-visible:border-[#3D4D6B] px-5 bg-[#F9FAFB]/30"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2 pl-1">
+            <input 
+                type="checkbox" 
+                id="remember" 
+                className="h-4 w-4 rounded border-[#E5E5E5] text-[#3D4D6B] focus:ring-[#3D4D6B]/20" 
+            />
+            <label htmlFor="remember" className="text-xs font-medium text-[#666666] select-none">
+              Keep me signed in
+            </label>
+          </div>
+
+          <Button 
+            disabled={loading}
+            className="w-full h-14 rounded-xl bg-[#3D4D6B] hover:bg-[#2C3A52] text-white font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+          >
+            {loading ? 'Signing in...' : (
+                <>
+                    Sign In <ArrowRight className="h-4 w-4" />
+                </>
+            )}
+          </Button>
+        </form>
+
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-gray-100"></span>
+          </div>
+          <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-widest">
+            <span className="bg-white px-4 text-[#CCCCCC]">or</span>
+          </div>
+        </div>
+
+        <Button
+          variant="outline"
+          className="w-full h-14 rounded-xl border-[#E5E5E5] bg-[#E9EEF2]/50 hover:bg-[#E9EEF2] text-[#3D4D6B] font-bold text-sm gap-3 transition-colors"
+        >
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="h-5 w-5" />
+          Continue with Google
+        </Button>
+      </div>
+
+      <div className="flex flex-col items-center space-y-8">
+        <p className="text-sm text-[#666666]">
+          Don&apos;t have an account?{' '}
+          <Link href="/auth/register" className="font-bold text-[#1A1A1A] hover:underline underline-offset-4 decoration-2 decoration-[#3D4D6B]/30">
+            Sign up
+          </Link>
+        </p>
+
+        <div className="flex items-center gap-8 pt-4">
+            <div className="flex items-center gap-1.5 grayscale opacity-40">
+                <ShieldCheck className="h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">SSL Secured</span>
+            </div>
+            <div className="flex items-center gap-1.5 grayscale opacity-40">
+                <CheckCircle2 className="h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Verified Vendor</span>
+            </div>
+        </div>
+      </div>
     </div>
   );
 }

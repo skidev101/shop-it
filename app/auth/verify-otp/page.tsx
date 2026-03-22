@@ -1,137 +1,98 @@
-"use client";
+'use client';
 
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import Link from 'next/link';
+import { Shield, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  InputOTPSeparator,
 } from "@/components/ui/input-otp";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import client from "@/lib/api/client";
-import { verifyOtp } from "@/lib/api/auth";
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-const otpSchema = z.object({
-  pin: z.string().length(6, "Enter all 6 digits"),
-});
-
-export default function VerifyOtpPage() {
+export default function VerifyOTPPage() {
+  const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState('');
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(otpSchema),
-    defaultValues: { pin: "" },
-  });
-
-  const onSubmit = async (data: { pin: string }) => {
-    try {
-      const response = await verifyOtp({ email: email!, otp: data.pin });
-      console.log("OTP verification response:", response);
-
-      if (response.success) {
-        toast.success("Account verified!");
-        router.push("/auth/login");
-      }
-    } catch (error: any) {
-      toast.info("Please verify your email to continue.");
-      // Redirect to OTP page and pass the email so the user doesn't have to type it
-      router.push(`/auth/verify-otp?email=${encodeURIComponent(email!)}`);
-      return;
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) {
+        toast.error('Please enter the full 6-digit code.');
+        return;
     }
+    
+    setLoading(true);
+    // Mock verification
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    toast.success('Email verified successfully!');
+    setLoading(false);
+    router.push('/');
   };
 
-  // if (!email) {
-  //   router.push("/auth/login");
-  //   return null;
-  // }
-
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Verify Email</CardTitle>
-          <CardDescription>
-            Enter the code sent to{" "}
-            <span className="font-medium text-primary">{email}</span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FieldGroup className="flex flex-col items-center space-y-6">
-              <Field className="flex flex-col items-center gap-4">
-                <FieldLabel className="sr-only">One-Time Password</FieldLabel>
+    <div className="w-full max-w-[480px] space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="h-16 w-16 bg-[#F0F4F8] rounded-full flex items-center justify-center">
+          <Shield className="h-8 w-8 text-[#3D4D6B]" />
+        </div>
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-bold text-[#1A1A1A] tracking-tight">
+            Check your email
+          </h2>
+          <p className="text-sm text-[#666666] max-w-[320px] mx-auto">
+            We&apos;ve sent a 6-digit verification code to your registered email address.
+          </p>
+        </div>
+      </div>
 
-                <Controller
-                  control={control}
-                  name="pin"
-                  render={({ field }) => (
-                    <InputOTP
-                      maxLength={6}
-                      onComplete={() => handleSubmit(onSubmit)()}
-                      {...field}
-                    >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
-                  )}
-                />
+      <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50">
+        <form onSubmit={handleVerify} className="space-y-8 flex flex-col items-center">
+          <InputOTP
+            maxLength={6}
+            value={otp}
+            onChange={(value) => setOtp(value)}
+            className="gap-3"
+          >
+            <InputOTPGroup className="gap-2">
+              <InputOTPSlot index={0} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+              <InputOTPSlot index={1} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+              <InputOTPSlot index={2} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+              <InputOTPSlot index={3} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+              <InputOTPSlot index={4} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+              <InputOTPSlot index={5} className="h-14 w-12 rounded-xl border-[#E5E5E5] text-lg font-bold" />
+            </InputOTPGroup>
+          </InputOTP>
 
-               
-                {errors.pin && (
-                  <p className="text-sm font-medium text-destructive">
-                    {errors.pin.message}
-                  </p>
-                )}
+          <Button 
+            disabled={loading}
+            className="w-full h-14 rounded-xl bg-[#3D4D6B] hover:bg-[#2C3A52] text-white font-bold text-sm transition-all"
+          >
+            {loading ? 'Verifying...' : 'Verify'}
+          </Button>
 
-                <FieldDescription>
-                  The code expires in 10 minutes.
-                </FieldDescription>
-              </Field>
+          <div className="text-center space-y-2">
+            <p className="text-[10px] font-bold text-[#999999] uppercase tracking-widest">
+                Didn&apos;t receive the code?
+            </p>
+            <button 
+                type="button"
+                onClick={() => toast.info('New code sent to your email.')}
+                className="text-xs font-bold text-[#3D4D6B] hover:underline"
+            >
+                Resend code
+            </button>
+          </div>
+        </form>
+      </div>
 
-              <Button
-                type="submit"
-                className="w-full h-11"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Verifying..." : "Verify & Continue"}
-              </Button>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+      <Link href="/auth/login" className="flex items-center justify-center gap-2 text-sm font-bold text-[#666666] hover:text-[#1A1A1A] transition-colors group">
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+        Back to Login
+      </Link>
     </div>
   );
 }

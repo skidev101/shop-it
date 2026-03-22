@@ -1,0 +1,220 @@
+MULTIVENDOR ECOMMERCE — NEXT.JS FRONTEND FILE TREE
+====================================================
+
+my-multivendor-frontend/
+│
+├── next.config.ts               # Image domains, rewrites for vendor subpaths, env vars
+├── middleware.ts                # Edge middleware: auth checks, vendor subdomain routing, locale
+├── tailwind.config.ts           # Tailwind setup with custom design tokens per vendor theme
+├── tsconfig.json
+├── .env.local                   # API base URL, Stripe public key, Clerk/auth public keys
+│
+├── app/
+│   │
+│   ├── (marketing)/             # Route group — public marketing pages
+│   │   ├── page.tsx             # Homepage: hero, featured vendors, trending products
+│   │   └── layout.tsx           # Marketing layout: nav, footer, cookie banner
+│   │
+│   ├── (shop)/                  # Route group — core shopping experience
+│   │   ├── products/
+│   │   │   ├── page.tsx         # Product listing: filters, pagination, sort
+│   │   │   └── [slug]/
+│   │   │       ├── page.tsx     # Product detail: images, variants, add to cart, reviews
+│   │   │       └── loading.tsx  # Skeleton loader for PDP
+│   │   ├── cart/
+│   │   │   └── page.tsx         # Cart: line items grouped by vendor, coupon input, totals
+│   │   ├── checkout/
+│   │   │   ├── page.tsx         # Checkout: address, shipping options, Stripe payment element
+│   │   │   └── confirmation/
+│   │   │       └── page.tsx     # Order confirmation with vendor-split order summary
+│   │   └── search/
+│   │       └── page.tsx         # Full-text search results with faceted filters
+│   │
+│   ├── (vendor)/                # Route group — vendor storefronts
+│   │   └── [vendorSlug]/
+│   │       ├── page.tsx         # Vendor storefront: banner, about, featured products, reviews
+│   │       ├── layout.tsx       # Vendor layout: branded header, nav with vendor context
+│   │       ├── products/
+│   │       │   └── page.tsx     # Vendor's full product catalog
+│   │       └── reviews/
+│   │           └── page.tsx     # All reviews for this vendor with rating breakdown
+│   │
+│   ├── (dashboard)/             # Route group — vendor dashboard (protected)
+│   │   ├── layout.tsx           # Dashboard shell: sidebar nav, auth guard, vendor context
+│   │   ├── overview/
+│   │   │   └── page.tsx         # Sales summary, recent orders, revenue chart, quick actions
+│   │   ├── products/
+│   │   │   ├── page.tsx         # Product table: status, inventory, edit/delete actions
+│   │   │   ├── new/
+│   │   │   │   └── page.tsx     # Create product: title, description, images, variants, pricing
+│   │   │   └── [id]/
+│   │   │       └── page.tsx     # Edit product form with live preview
+│   │   ├── orders/
+│   │   │   ├── page.tsx         # Order table: status filter, fulfillment actions, export
+│   │   │   └── [id]/
+│   │   │       └── page.tsx     # Order detail: line items, customer info, shipping, refund
+│   │   ├── analytics/
+│   │   │   └── page.tsx         # Revenue, conversion, top products charts
+│   │   └── settings/
+│   │       └── page.tsx         # Store profile, shipping zones, payout info, notifications
+│   │
+│   ├── (account)/               # Route group — buyer account pages
+│   │   ├── layout.tsx           # Account layout: sidebar with orders, wishlist, addresses
+│   │   ├── orders/
+│   │   │   ├── page.tsx         # Order history with status and tracking links
+│   │   │   └── [id]/
+│   │   │       └── page.tsx     # Single order: items, vendor breakdown, return request
+│   │   └── wishlist/
+│   │       └── page.tsx         # Saved items with add to cart and share options
+│   │
+│   ├── (auth)/                  # Route group — auth pages
+│   │   ├── sign-in/
+│   │   │   └── page.tsx         # Sign in with social providers and email/password
+│   │   ├── sign-up/
+│   │   │   └── page.tsx         # Buyer and vendor registration with role selection
+│   │   └── onboarding/
+│   │       └── page.tsx         # Vendor onboarding: store setup, Stripe Connect, verification
+│   │
+│   ├── layout.tsx               # Root layout: fonts, theme provider, auth provider, toasts
+│   ├── not-found.tsx            # Global 404 page
+│   ├── error.tsx                # Global error boundary
+│   └── globals.css              # Global styles, Tailwind base, CSS vars for vendor theming
+│
+├── components/
+│   ├── ui/                      # Base primitives (shadcn/ui)
+│   │   ├── button.tsx
+│   │   ├── input.tsx
+│   │   ├── dialog.tsx
+│   │   ├── badge.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   ├── toast.tsx
+│   │   ├── select.tsx
+│   │   ├── slider.tsx
+│   │   ├── checkbox.tsx
+│   │   └── data-table.tsx       # TanStack Table wrapper with sort, filter, pagination
+│   │
+│   ├── layout/
+│   │   ├── navbar.tsx           # Top nav: logo, search bar, cart icon, auth menu
+│   │   ├── footer.tsx           # Footer: links, newsletter signup, vendor CTA
+│   │   ├── sidebar.tsx          # Dashboard sidebar scoped to vendor role
+│   │   └── breadcrumb.tsx       # Dynamic breadcrumb from route segments
+│   │
+│   ├── product/
+│   │   ├── product-card.tsx     # Image, title, vendor name, price, rating, wishlist toggle
+│   │   ├── product-grid.tsx     # Responsive grid of ProductCards with skeleton state
+│   │   ├── product-carousel.tsx # Image gallery carousel (Embla/Keen Slider)
+│   │   ├── variant-selector.tsx # Color/size variant picker with availability state
+│   │   ├── price-display.tsx    # Formatted price with sale, currency support
+│   │   ├── stock-badge.tsx      # Inventory status indicator
+│   │   └── review-stars.tsx     # Star rating (read-only and interactive)
+│   │
+│   ├── cart/
+│   │   ├── cart-drawer.tsx      # Slide-over cart drawer with line items and checkout CTA
+│   │   ├── cart-item.tsx        # Image, name, variant, qty stepper, remove button
+│   │   ├── cart-summary.tsx     # Subtotal, shipping estimate, taxes, total by vendor
+│   │   └── coupon-input.tsx     # Promo code field with validation feedback
+│   │
+│   ├── checkout/
+│   │   ├── address-form.tsx     # Shipping address with autocomplete
+│   │   ├── shipping-options.tsx # Shipping method selector per vendor sub-order
+│   │   ├── payment-element.tsx  # Stripe Payment Element wrapper
+│   │   └── order-summary.tsx    # Checkout sidebar with vendor breakdown
+│   │
+│   ├── vendor/
+│   │   ├── vendor-card.tsx      # Vendor listing card: logo, name, rating, product count
+│   │   ├── vendor-banner.tsx    # Storefront hero with cover image and stats
+│   │   └── vendor-badge.tsx     # Inline vendor attribution on product cards
+│   │
+│   ├── dashboard/
+│   │   ├── metric-card.tsx      # KPI card: value, label, trend, sparkline
+│   │   ├── revenue-chart.tsx    # Recharts line chart for revenue over time
+│   │   ├── order-status-badge.tsx  # pending | processing | shipped | delivered
+│   │   └── product-form.tsx     # Create/edit form with image upload and variants
+│   │
+│   └── search/
+│       ├── search-bar.tsx       # Command palette / instant search with keyboard shortcut
+│       ├── filter-sidebar.tsx   # Faceted filters: category, price range, vendor, rating
+│       └── sort-select.tsx      # Sort: relevance, price, rating, newest
+│
+├── hooks/
+│   ├── use-cart.ts              # Cart state: add, remove, update qty, persist to localStorage
+│   ├── use-wishlist.ts          # Wishlist synced to backend API for authed users
+│   ├── use-vendor.ts            # Vendor context from route params + API fetch
+│   ├── use-search.ts            # Search with debounce and facets
+│   ├── use-infinite-products.ts # Infinite scroll with React Query
+│   ├── use-media-query.ts       # Responsive breakpoint detection
+│   ├── use-debounce.ts          # Generic debounce for inputs
+│   └── use-currency.ts          # Multi-currency formatting from user locale
+│
+├── store/                       # Global client state (Zustand)
+│   ├── cart-store.ts            # Cart items keyed by vendorId, totals, coupon state
+│   ├── ui-store.ts              # Cart drawer open, mobile nav, search modal state
+│   └── vendor-store.ts          # Active vendor context for dashboard pages
+│
+├── lib/
+│   ├── api/                     # Typed fetch functions calling your Express backend
+│   │   ├── client.ts            # Base fetch wrapper: auth headers, error handling, retries
+│   │   ├── products.ts          # list, getBySlug, create, update, delete
+│   │   ├── orders.ts            # create, list, getById — scoped by role
+│   │   ├── vendors.ts           # getProfile, listProducts, getReviews
+│   │   ├── cart.ts              # syncCart, applyCoupon
+│   │   └── auth.ts              # login, register, refreshToken, logout
+│   ├── stripe.ts                # Stripe.js loader + PaymentIntent helpers
+│   ├── validations.ts           # Zod schemas: product, order, address, vendor forms
+│   └── utils.ts                 # cn(), formatPrice(), slugify(), formatDate()
+│
+├── types/
+│   ├── product.ts               # Product, Variant, Category, Image
+│   ├── order.ts                 # Order, LineItem, SubOrder (per vendor)
+│   ├── vendor.ts                # Vendor, VendorSettings, PayoutInfo
+│   ├── user.ts                  # User, Session, Role (buyer | vendor | admin)
+│   ├── cart.ts                  # CartItem, Cart (grouped by vendor), CartTotals
+│   └── api.ts                   # API response wrappers, pagination, error shapes
+│
+├── config/
+│   ├── site.ts                  # Site name, URL, metadata defaults, social links
+│   ├── navigation.ts            # Nav link definitions for all route groups
+│   └── categories.ts            # Product category tree with slugs and icons
+│
+└── public/
+    ├── logo.svg
+    └── icons/                   # Favicons, OG images, app icons
+
+
+====================================================
+KEY FRONTEND NOTES
+====================================================
+
+CALLING YOUR EXPRESS BACKEND
+  All backend calls live in lib/api/*.ts
+  client.ts is the base fetch wrapper — set NEXT_PUBLIC_API_URL
+  in .env.local to point at your Express server.
+  React Query (TanStack Query) handles caching, refetching,
+  and loading/error states throughout the app.
+
+ROUTE GROUPS (no effect on URL)
+  (marketing)  — homepage, landing pages
+  (shop)       — products, cart, checkout, search
+  (vendor)     — public vendor storefronts /[vendorSlug]
+  (dashboard)  — protected vendor dashboard
+  (account)    — buyer account: orders, wishlist
+  (auth)       — sign in, sign up, onboarding
+
+MULTIVENDOR CART PATTERN
+  Cart items are keyed by vendorId in cart-store.ts.
+  cart-summary.tsx renders totals broken down per vendor.
+  checkout/shipping-options.tsx lets buyers pick shipping
+  per vendor sub-order before paying.
+
+RECOMMENDED FRONTEND STACK
+  Framework   — Next.js 14+ (App Router)
+  Styling     — Tailwind CSS + shadcn/ui
+  State       — Zustand (cart, UI)
+  Data fetch  — TanStack Query (React Query)
+  Forms       — React Hook Form + Zod
+  Payments    — Stripe.js + @stripe/react-stripe-js
+  Auth        — Clerk or NextAuth (JWT from your Express API)
+  Charts      — Recharts
+  Search UI   — cmdk (command palette)
+  Carousel    — Embla Carousel
