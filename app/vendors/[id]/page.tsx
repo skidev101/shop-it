@@ -113,7 +113,7 @@ export default function VendorStorefrontPage({ params }: { params: { id: string 
         </div>
       </div>
 
-      <div className="container mx-auto px-4 lg:px-12 py-10">
+      <div className=" mx-auto px-4 lg:px-12 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
             {/* Sidebar */}

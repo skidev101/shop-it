@@ -11,14 +11,15 @@ import {
   ChevronRight,
   Plus,
   ArrowRight,
-  ShoppingBag
+  Check,
 } from 'lucide-react';
-import { ShoppingBag } from "@phosphor-icons/react"
+import { Compass, ShoppingBagIcon } from "@phosphor-icons/react"
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/hooks/use-cart';
+import { Label } from '@/components/ui/label';
 
 // Mock data for the product detail view
 const product = {
@@ -320,7 +321,7 @@ export default function ProductDetailPage() {
                         </div>
                         {/* Box abstract graphic */}
                         <div className="absolute right-[-20px] bottom-[-20px] opacity-5">
-                            <ShoppingBag size={200} weight="fill" />
+                            <ShoppingBagIcon size={200} weight="fill" />
                         </div>
                     </div>
                 </div>

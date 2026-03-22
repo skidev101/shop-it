@@ -1,22 +1,20 @@
+'use client';
+
 import Link from "next/link";
-import { ChevronRight, LayoutGrid, Music, Camera, Monitor, Wrench, Package, ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ProductCard } from "@/components/product-card";
+import { Hero } from "@/components/hero";
+import { CategoryBar } from "@/components/category-bar";
+import { ChevronRight, Star, Heart, Plus } from "lucide-react";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
-import { Hero } from "@/components/hero";
-import { ProductCard } from "@/components/product-card";
-import { VendorCard } from "@/components/vendor-card";
-import { CategoryBar } from "@/components/category-bar";
-import { EditorialCard } from "@/components/editorial-card";
-import { SidebarVendorCard } from "@/components/sidebar-vendor-card";
-
 const categories = [
-  { name: "All Products", icon: LayoutGrid, active: true },
-  { name: "Audio", icon: Music },
-  { name: "Photography", icon: Camera },
-  { name: "Desk", icon: Monitor },
-  { name: "Tools", icon: Wrench },
-  { name: "Accessories", icon: Package },
+  { name: "All Products", iconName: "LayoutGrid", active: true },
+  { name: "Audio", iconName: "Music" },
+  { name: "Photography", iconName: "Camera" },
+  { name: "Desk", iconName: "Monitor" },
+  { name: "Tools", iconName: "Wrench" },
+  { name: "Accessories", iconName: "Package" },
 ];
 
 const trendingProducts = [
@@ -70,153 +68,136 @@ const trendingProducts = [
   },
 ];
 
-const artisans = [
-    { 
-        id: "v1",
-        name: "Vector Forge Lab", 
-        role: "Established 2017 • 1.2k Followers", 
-        rating: 4.9, 
-        avatar: "https://i.pravatar.cc/150?u=v",
-        isVerified: true,
-        thumbnails: [
-            "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=200&q=80",
-            "https://images.unsplash.com/photo-1526170315870-ef68bc6b3be3?w=200&q=80",
-            "https://images.unsplash.com/photo-1627123424574-724758594e93?w=200&q=80"
-        ]
-    },
-    { 
-        id: "v2",
-        name: "Lignum Guild", 
-        role: "Established 2014 • 856 Followers", 
-        rating: 4.2, 
-        avatar: "https://i.pravatar.cc/150?u=l",
-        isVerified: false,
-        thumbnails: [
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
-            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80"
-        ]
-    },
-    { 
-        id: "v3",
-        name: "Obscura Ceramics", 
-        role: "Established 2010 • 2.4k Followers", 
-        rating: 5.0, 
-        avatar: "https://i.pravatar.cc/150?u=o",
-        isVerified: true,
-        thumbnails: [
-            "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=200&q=80",
-            "https://images.unsplash.com/photo-1520116468816-95b69f847357?w=200&q=80",
-            "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=200&q=80"
-        ]
-    },
-];
-
-const newVendors = [
-    { name: "Kinetik Robotics", category: "ELECTRONICS", location: "Berlin, DE", image: "https://picsum.photos/seed/k1/100" },
-    { name: "Loom & Latitude", category: "TEXTILES", location: "Cusco, PE", image: "https://picsum.photos/seed/l1/100" },
-    { name: "Ironclad Culinary", category: "KITCHEN", location: "Sheffield, UK", image: "https://picsum.photos/seed/i1/100" },
-    { name: "Velvet & Vine", category: "INTERIORS", location: "Lyon, FR", image: "https://picsum.photos/seed/v1/100" },
-];
-
-export default async function Home() {
+export default function Home() {
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 lg:px-12 py-10">
-        
-        {/* 1. Hero Section */}
+      <div className="container mx-auto px-4 lg:px-6 py-8">
         <Hero />
 
-        {/* 2. Categorical Filter Bar */}
+        {/* Filter Bar */}
         <CategoryBar 
             categories={categories} 
             productCount={24506} 
         />
 
-        {/* 3. Trending Now Section */}
-        <section className="mb-24">
-          <div className="flex items-end justify-between mb-10">
+        {/* Trending Section */}
+        <section className="mb-20">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-4xl font-bold tracking-tight text-[#1A1A1A] mb-2">Trending Now</h2>
-              <p className="text-[#999999] text-[15px] font-medium leading-relaxed">The most coveted items in the Atlas this hour.</p>
+              <h2 className="text-3xl font-bold tracking-tight text-[#1A1A1A]">Trending Now</h2>
+              <p className="text-sm text-[#666666] mt-1">The most coveted items in the Atlas this hour.</p>
             </div>
-            <Link href="/products" className="group flex items-center gap-2 text-[11px] font-black text-[#1A1A1A] hover:text-[#0047FF] transition-all uppercase tracking-widest">
-              View All <ChevronRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+            <Link href="/products" className="flex items-center gap-1 text-xs font-bold text-[#1A1A1A] hover:opacity-70 transition-opacity uppercase tracking-widest">
+              View All <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {trendingProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
         </section>
 
-        {/* 4. Curated Artisans Header */}
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <h2 className="text-4xl font-black tracking-tighter text-[#1A1A1A] mb-4">Curated Artisans</h2>
-          <p className="text-[15px] text-[#666666] leading-relaxed font-medium">
+        {/* Curated Artisans Header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-3xl font-bold tracking-tight text-[#1A1A1A] mb-4">Curated Artisans</h2>
+          <p className="text-sm text-[#666666] leading-relaxed">
             We hand-vet every vendor in the Atlas to ensure uncompromising quality and ethical manufacturing standards.
           </p>
         </div>
 
-        {/* 5. Artisan Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-28">
-            {artisans.map((artisan, idx) => (
-                <VendorCard 
-                    key={artisan.id} 
-                    {...artisan} 
-                    viewMode={idx === 2 ? 'minimal' : 'full'}
-                />
-            ))}
-        </div>
-
-        {/* 6. Editor's Picks & Journal Section */}
-        <section className="mb-24">
-            <div className="flex items-baseline justify-between mb-12 border-b border-[#F5F5F7] pb-8">
-                <h2 className="text-4xl font-black text-[#1A1A1A] tracking-tighter">Editor's Picks</h2>
-                <div className="flex items-center gap-2 text-[10px] font-black text-[#1A1A1A] uppercase tracking-[0.2em] cursor-pointer group">
-                    Highlighting <ChevronRight className="h-4 w-4 -rotate-90 group-hover:bg-[#1A1A1A] group-hover:text-white rounded-full transition-all" />
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                {/* Big Editorial Cards */}
-                <div className="lg:col-span-4">
-                    <EditorialCard 
-                        title="The Analog Renaissance"
-                        description="Why physical tools are making a comeback in a digital world and how to curate them."
-                        image="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80"
-                        aspectRatio="portrait"
-                    />
-                </div>
-                <div className="lg:col-span-5">
-                    <EditorialCard 
-                        title="Brutalist Interiors"
-                        description="12 vendors redefining the heavy aesthetic for light spaces in modern architecture."
-                        image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80"
-                        aspectRatio="square"
-                        className="h-full"
-                    />
-                </div>
-                
-                {/* New to Atlas Sidebar */}
-                <div className="lg:col-span-3">
-                    <h3 className="text-2xl font-black text-[#1A1A1A] tracking-tight mb-10">New to Atlas</h3>
-                    <div className="space-y-10">
-                        {newVendors.map((vendor) => (
-                            <SidebarVendorCard key={vendor.name} {...vendor} />
+        {/* Artisan Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            {[
+                { name: "Vector Forge Lab", role: "Established 2017 • 1.2k Followers", rating: 4.9, avatar: "https://i.pravatar.cc/150?u=v" },
+                { name: "Lignum Guild", role: "Established 2014 • 856 Followers", rating: 4.2, avatar: "https://i.pravatar.cc/150?u=l" },
+                { name: "Obscura Ceramics", role: "Established 2010 • 2.4k Followers", rating: 5.0, avatar: "https://i.pravatar.cc/150?u=o" },
+            ].map((artisan, idx) => (
+                <div key={artisan.name} className="flex flex-col items-center text-center p-8 bg-white border border-gray-100 rounded-2xl group hover:shadow-xl transition-all">
+                    <div className="h-20 w-20 rounded-full bg-gray-100 mb-6 overflow-hidden relative group-hover:scale-110 transition-transform duration-500">
+                        <Image src={artisan.avatar} alt={artisan.name} fill className="object-cover" />
+                    </div>
+                    <div className="flex gap-1 mb-2">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                            <Star key={s} className={artisan.rating >= s ? "h-3.5 w-3.5 fill-orange-400 text-orange-400" : "h-3.5 w-3.5 text-gray-200"} />
+                        ))}
+                        <span className="text-[10px] font-bold ml-1">{artisan.rating}</span>
+                    </div>
+                    <h3 className="text-lg font-bold mb-1 group-hover:text-[#0047FF] transition-colors">{artisan.name}</h3>
+                    <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-8">{artisan.role}</p>
+                    
+                    <div className="grid grid-cols-3 gap-2 w-full mb-8">
+                        {[1, 2, 3].map((p) => (
+                            <div key={p} className="aspect-square bg-[#F5F5F7] rounded-lg relative overflow-hidden group-hover:bg-[#E5E5E7] transition-colors" />
                         ))}
                     </div>
                     
-                    <Link href="/vendors" className="block mt-12 group">
-                        <div className="h-14 w-full bg-[#F5F5F7] rounded-2xl flex items-center justify-center relative overflow-hidden transition-all group-hover:bg-[#1A1A1A]">
-                            <span className="relative z-10 text-[10px] font-black uppercase tracking-[0.2em] text-[#999999] group-hover:text-white transition-colors">
-                                View All Vendors
-                            </span>
-                            <div className="absolute right-6 transform group-hover:translate-x-2 transition-transform text-[#999999] group-hover:text-white">
-                                <ChevronRight className="h-4 w-4" />
+                    {idx === 2 ? (
+                         <Button variant="outline" className="w-full h-11 rounded-xl bg-gray-50 border-none text-[11px] font-black uppercase tracking-widest text-gray-400 hover:bg-[#1A1A1A] hover:text-white transition-all">View All Products</Button>
+                    ) : (
+                        <div className="flex gap-2 w-full">
+                            <Button className="flex-1 h-11 rounded-xl bg-[#1A1A1A] text-[11px] font-black uppercase tracking-widest">Add to Cart</Button>
+                            <Button variant="outline" size="icon" className="h-11 w-11 rounded-xl bg-gray-50 border-none hover:bg-orange-50 hover:text-orange-500 transition-colors">
+                                <Heart className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+
+        {/* Editor's Picks */}
+        <section className="mb-20">
+            <div className="flex items-baseline justify-between mb-8">
+                <h2 className="text-3xl font-bold tracking-tight text-[#1A1A1A]">Editor's Picks</h2>
+                <div className="flex items-center gap-1 text-[10px] font-black text-[#1A1A1A] uppercase tracking-widest cursor-pointer group">
+                    Highlighting <ChevronRight className="h-3 w-3 -rotate-90 group-hover:bg-[#1A1A1A] group-hover:text-white rounded-full transition-all" />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div className="md:col-span-4 relative aspect-[4/5] rounded-2xl overflow-hidden group">
+                    <Image src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80" alt="Analog Renaissance" fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-8 flex flex-col justify-end">
+                        <h3 className="text-2xl font-bold text-white mb-2">The Analog Renaissance</h3>
+                        <p className="text-sm text-white/70 mb-6">Why physical tools are making a comeback in a digital world and how to curate them.</p>
+                        <Button variant="outline" className="w-max h-10 px-6 rounded-lg bg-white/10 border-white/20 text-white text-xs font-bold hover:bg-white hover:text-[#1A1A1A] transition-all">READ JOURNAL</Button>
+                    </div>
+                </div>
+                <div className="md:col-span-5 relative aspect-[5/5] md:aspect-auto rounded-2xl overflow-hidden group">
+                    <Image src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="Brutalist Interiors" fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-8 flex flex-col justify-end">
+                        <h3 className="text-2xl font-bold text-white mb-2">Brutalist Interiors</h3>
+                        <p className="text-sm text-white/70 mb-6">12 vendors redefining the heavy aesthetic for light spaces in modern architecture.</p>
+                        <Button variant="outline" className="w-max h-10 px-6 rounded-lg bg-white/10 border-white/20 text-white text-xs font-bold hover:bg-white hover:text-[#1A1A1A] transition-all">READ JOURNAL</Button>
+                    </div>
+                </div>
+                
+                {/* New to Atlas Sidebar */}
+                <div className="md:col-span-3 space-y-8">
+                    <h3 className="text-xl font-bold">New to Atlas</h3>
+                    <div className="space-y-6">
+                        {[
+                            { name: "Kinetik Robotics", cat: "Electronics", city: "Berlin, DE" },
+                            { name: "Loom & Latitude", cat: "Textiles", city: "Cusco, PE" },
+                            { name: "Ironclad Culinary", cat: "Kitchen", city: "Sheffield, UK" },
+                        ].map((vendor) => (
+                            <div key={vendor.name} className="flex gap-4 group cursor-pointer items-center">
+                                <div className="h-14 w-14 bg-gray-100 rounded-xl overflow-hidden relative grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                                    <Image src={`https://picsum.photos/seed/${vendor.name}/100`} alt={vendor.name} fill className="object-cover" />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-bold group-hover:text-[#0047FF] transition-colors">{vendor.name}</h4>
+                                    <p className="text-[10px] text-gray-400 mt-0.5 uppercase tracking-tight">Certified from {vendor.city}</p>
+                                    <span className="text-[10px] font-black text-gray-200 group-hover:text-[#0047FF]/20 uppercase tracking-widest block mt-1 transition-colors">{vendor.cat}</span>
+                                </div>
                             </div>
+                        ))}
+                    </div>
+                    <Link href="/vendors" className="block mt-4 group">
+                        <div className="h-12 w-full bg-gray-50 rounded-xl flex items-center justify-center relative overflow-hidden transition-all group-hover:bg-[#1A1A1A]">
+                            <span className="relative z-10 text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-white">View All Vendors</span>
                         </div>
                     </Link>
                 </div>

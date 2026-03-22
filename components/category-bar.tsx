@@ -1,12 +1,29 @@
 'use client';
 
-import { LucideIcon } from 'lucide-react';
+import { 
+  LayoutGrid, 
+  Music, 
+  Camera, 
+  Monitor, 
+  Wrench, 
+  Package,
+  LucideIcon 
+} from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  'LayoutGrid': LayoutGrid,
+  'Music': Music,
+  'Camera': Camera,
+  'Monitor': Monitor,
+  'Wrench': Wrench,
+  'Package': Package,
+};
+
 export interface CategoryItem {
   name: string;
-  icon: LucideIcon;
+  iconName: string;
   active?: boolean;
 }
 
@@ -29,6 +46,8 @@ export function CategoryBar({
       <div className="flex flex-wrap items-center gap-2">
         {categories.map((cat) => {
           const isActive = activeCategory === cat.name || (cat.active && !activeCategory);
+          const Icon = ICON_MAP[cat.iconName] || Package;
+
           return (
             <Button
               key={cat.name}
@@ -41,7 +60,7 @@ export function CategoryBar({
                   : "text-[#666666] hover:bg-[#F5F5F7] hover:text-[#1A1A1A]"
               )}
             >
-              <cat.icon className={cn("h-4 w-4 mr-2.5", isActive ? "text-white" : "text-[#999999]")} />
+              <Icon className={cn("h-4 w-4 mr-2.5", isActive ? "text-white" : "text-[#999999]")} />
               {cat.name}
             </Button>
           );
