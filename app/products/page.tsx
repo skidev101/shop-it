@@ -115,7 +115,7 @@ export default function SearchPage() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between px-5 h-12 bg-[#F5F5F7] rounded-xl text-[11px] font-black uppercase tracking-widest text-[#1A1A1A] cursor-pointer hover:bg-[#E5E5E7] transition-all min-w-[200px]">
+              <div className="flex items-center justify-between px-5 h-12 bg-[#F5F5F7] rounded-xl text-[11px] font-black uppercase tracking-widest text-[#1A1A1A] cursor-pointer hover:bg-[#E5E5E7] transition-all min-w-50">
                 Sort By: Recommended
                 <ChevronDown className="h-4 w-4 ml-4" />
               </div>

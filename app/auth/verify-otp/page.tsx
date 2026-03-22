@@ -34,7 +34,7 @@ export default function VerifyOTPPage() {
   };
 
   return (
-    <div className="w-full max-w-[480px] space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="w-full max-w-120 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center space-y-4">
         <div className="h-16 w-16 bg-[#F0F4F8] rounded-full flex items-center justify-center">
           <Shield className="h-8 w-8 text-[#3D4D6B]" />

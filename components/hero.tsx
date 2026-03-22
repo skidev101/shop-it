@@ -22,7 +22,7 @@ export function Hero() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 p-6 md:p-8 md:p-12 flex flex-col justify-end h-full">
+        <div className="relative z-10 p-6 md:p-8 flex flex-col justify-end h-full">
             <div className="max-w-2xl space-y-6">
                 <span className="inline-block px-3 py-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-[10px] font-bold text-white uppercase tracking-wider">
                     New Arrivals - This Week
