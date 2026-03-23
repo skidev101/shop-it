@@ -71,7 +71,7 @@ const trendingProducts = [
 export default function Home() {
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 lg:px-6 py-8">
+      <div className="mx-auto px-4 lg:px-6 py-8">
         <Hero />
 
         {/* Filter Bar */}
