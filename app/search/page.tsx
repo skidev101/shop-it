@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { ChevronDown, Search as SearchIcon } from 'lucide-react';
-import { SearchFilters } from '@/components/search-filters';
-import { SearchProductCard } from '@/components/search-product-card';
+import { GlobalSidebar } from '@/components/global-sidebar';
+import { ProductCard } from '@/components/product-card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 const searchResults = [
@@ -127,14 +126,14 @@ export default function SearchPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           {/* Sidebar Filters */}
           <aside className="lg:col-span-3">
-             <SearchFilters />
+             <GlobalSidebar />
           </aside>
 
           {/* Results Grid */}
           <main className="lg:col-span-9">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12">
               {searchResults.map((product) => (
-                <SearchProductCard key={product.id} {...product} />
+                <ProductCard key={product.id} {...product} />
               ))}
             </div>
 

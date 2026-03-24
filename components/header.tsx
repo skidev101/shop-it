@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   Search, 
   ShoppingCart, 
@@ -14,8 +14,10 @@ import { Input } from './ui/input';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 export function Header() {
+  const pathname = usePathname();
   const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,10 +49,11 @@ export function Header() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { href: '/', label: 'Marketplace', active: true },
+    { href: '/', label: 'Home', active: true },
+    { href: '/shop', label: 'Shop' },
     { href: '/vendors', label: 'Vendors' },
-    { href: '/categories', label: 'Categories' },
-    { href: '/editorial', label: 'Editorial' },
+    { href: '/deals', label: 'Deals' },
+    { href: '/help', label: 'Help' },
   ];
 
   return (
@@ -80,20 +83,23 @@ export function Header() {
 
             {/* Desktop Main Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.label}
-                  href={link.href} 
-                  className={cn(
-                    "text-[15px] font-medium transition-colors relative h-full flex items-center",
-                    link.active 
-                      ? "text-[#1A1A1A] after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-[#1A1A1A]" 
-                      : "text-[#666666] hover:text-[#1A1A1A]"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href));
+                return (
+                  <Link 
+                    key={link.label}
+                    href={link.href} 
+                    className={cn(
+                      "text-[15px] font-medium transition-colors relative h-full flex items-center",
+                      isActive 
+                        ? "text-[#1A1A1A] after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-[#1A1A1A]" 
+                        : "text-[#666666] hover:text-[#1A1A1A]"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Search and Actions */}
@@ -121,8 +127,8 @@ export function Header() {
                     )}
                   </Button>
                 </Link>
-                <div className="h-8 w-8 rounded-full bg-[#E5E5E5] overflow-hidden hidden sm:block">
-                  {/* User Avatar Placeholder */}
+                <div className="h-8 w-8 rounded-full font-bold bg-[#E5E5E5] overflow-hidden hidden sm:flex sm:justify-center sm:items-center">
+                  {/* User Avatar Placeholder */}M
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Star, MapPin, Mail, ChevronDown, Share2 } from 'lucide-react';
-import { StorefrontProductCard } from '@/components/storefront-product-card';
+import { ProductCard } from '@/components/product-card';
 import { cn } from '@/lib/utils';
 
 // Mock Data for the specific vendor (Terra & Timber Co.)
@@ -30,14 +30,16 @@ const products = [
     name: 'Cedar Pour-Over Base',
     category: 'Kitchenware',
     price: 58.00,
+    rating: 4.8,
     image: 'https://images.unsplash.com/photo-1544031608-27b687f89bca?w=600&q=80',
-    isNew: true
+    badge: 'NEW ARRIVAL'
   },
   {
     id: 'p2',
     name: 'Indigo Linen Runner',
     category: 'Textiles',
     price: 42.00,
+    rating: 4.9,
     image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600&q=80'
   },
   {
@@ -45,15 +47,16 @@ const products = [
     name: 'Sandstone Morning Mug',
     category: 'Ceramics',
     price: 32.00,
+    rating: 5.0,
     image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80',
-    isSale: true,
-    comparePrice: 45.00
+    badge: 'ON SALE'
   },
   {
     id: 'p4',
     name: 'Oak Floating Shelf',
     category: 'Furniture',
     price: 85.00,
+    rating: 4.7,
     image: 'https://images.unsplash.com/photo-1594222093582-7201e5445214?w=600&q=80'
   }
 ];
@@ -227,9 +230,9 @@ export default function VendorStorefrontPage({ params }: { params: { id: string 
                 </div>
 
                 {/* Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {products.map((product) => (
-                        <StorefrontProductCard key={product.id} {...product} />
+                        <ProductCard key={product.id} {...product} />
                     ))}
                 </div>
 

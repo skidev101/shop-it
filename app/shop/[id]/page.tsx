@@ -74,7 +74,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 lg:px-6 py-4">
+      <div className="mx-auto px-4 lg:px-6 py-4">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#999999] mb-8">
           <Link href="/" className="hover:text-[#1A1A1A]">Marketplace</Link>
