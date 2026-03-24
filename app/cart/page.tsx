@@ -11,17 +11,18 @@ import {
   Tag,
   ArrowRight,
   Settings,
+  ShoppingBag,
+  ChevronLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
 import { CheckoutSteps } from "@/components/checkout-steps";
 import { Separator } from "@/components/ui/separator";
 
 const steps = [
-  { id: 1, label: "Cart" },
-  { id: 2, label: "Details" },
+  { id: 1, label: "Review Cart" },
+  { id: 2, label: "Shipping" },
   { id: 3, label: "Payment" },
 ];
 
@@ -29,186 +30,150 @@ export default function CartPage() {
   const { items, updateQuantity, removeFromCart, cartTotal, addToCart } =
     useCart();
   const subtotal = cartTotal;
-  const discount = 0; // Placeholder
-  const total = subtotal - discount;
+  const shipping = 0;
+  const total = subtotal + shipping;
 
   const loadSampleItems = () => {
     const samples = [
       {
         id: "1",
-        name: "iPhone 15 Pro Max - Blue Titanium",
-        description: "The ultimate iPhone with Titanium design.",
-        image:
-          "https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&q=80",
-        price: 1199.99,
+        name: "Studio Reference X2",
+        category: "Acoustics",
+        price: 349,
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
         quantity: 1,
-        category: "Electronics",
+        description: "Professional grade studio headphones."
       },
       {
         id: "2",
-        name: "Sony WH-1000XM5 Noise Cancelling Headphones",
-        description: "Industry-leading noise cancellation.",
-        image:
-          "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&q=80",
-        price: 349.99,
+        name: "35mm Prime Artisan",
+        category: "Optics",
+        price: 890,
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80",
         quantity: 1,
-        category: "Electronics",
-      },
-      {
-        id: "3",
-        name: "Premium Leather Minimalist Wallet",
-        description: "Handcrafted genuine leather wallet.",
-        image:
-          "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&q=80",
-        price: 59.5,
-        quantity: 1,
-        category: "Fashion",
-      },
+        description: "High-performance camera lens."
+      }
     ];
     samples.forEach((item) => addToCart(item));
   };
 
   if (items.length === 0) {
     return (
-      <div className="container max-w-4xl px-4 py-20 flex flex-col items-center justify-center gap-6 text-center animate-in fade-in zoom-in duration-500">
-        <div className="h-32 w-32 bg-muted rounded-full flex items-center justify-center mb-4">
-          <Image
-            src="/window.svg"
-            width={64}
-            height={64}
-            alt="Empty Cart"
-            className="opacity-50"
-          />
-        </div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Your cart is empty
-        </h1>
-        <p className="text-muted-foreground max-w-md">
-          Looks like you haven&apos;t added anything to your cart yet. Discover
-          our latest products and start shopping!
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link href="/products">
-            <Button
-              size="lg"
-              className="h-12 px-8 rounded-xl font-bold bg-[#0047FF] hover:bg-[#0047FF]/90 transition-all hover:scale-105"
+      <div className="bg-white min-h-[80vh] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center space-y-8 animate-in fade-in zoom-in duration-700">
+          <div className="relative mx-auto h-40 w-40 bg-[#F5F5F7] rounded-full flex items-center justify-center">
+            <ShoppingBag className="h-16 w-16 text-[#1A1A1A] opacity-20" />
+            <div className="absolute inset-0 border-2 border-dashed border-[#E5E5E5] rounded-full animate-[spin_20s_linear_infinite]" />
+          </div>
+          
+          <div className="space-y-3">
+            <h1 className="text-3xl font-black tracking-tight text-[#1A1A1A]">Your Cart is Empty</h1>
+            <p className="text-[#666666] text-sm leading-relaxed">
+              Looks like you haven't added anything to your collection yet. Explore our curated selection of artisan goods.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Link href="/shop">
+              <Button className="w-full h-14 rounded-2xl bg-[#1A1A1A] text-white text-[11px] font-black uppercase tracking-widest hover:bg-[#333333] transition-all">
+                Explore Products
+              </Button>
+            </Link>
+            <Button 
+              variant="outline" 
+              onClick={loadSampleItems}
+              className="w-full h-14 rounded-2xl border-none bg-[#F5F5F7] text-[#666666] text-[11px] font-black uppercase tracking-widest hover:bg-[#E5E5E7] transition-all"
             >
-              Start Shopping
+              Load Sample Selection
             </Button>
-          </Link>
-          <Button
-            variant="outline"
-            size="lg"
-            className="h-12 px-8 rounded-xl font-bold border-[#0047FF] text-[#0047FF] hover:bg-[#0047FF]/5 transition-all hover:scale-105"
-            onClick={loadSampleItems}
-          >
-            Load Sample Products
-          </Button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container max-w-6xl px-4 py-8 mx-auto">
-      {/* Checkout Progress Steps */}
-      <div className="mb-12">
-        <CheckoutSteps currentStep={1} steps={steps} />
-      </div>
-
-      {/* Promo Banner */}
-      <div className="bg-[#0047FF]/10 border border-[#0047FF]/20 rounded-xl p-4 mb-8 flex items-start gap-3">
-        <div className="h-5 w-5 mt-0.5 rounded-full border-2 border-[#0047FF] flex items-center justify-center shrink-0">
-          <span className="text-xs font-bold text-[#0047FF]">i</span>
-        </div>
-        <p className="text-sm font-medium text-[#0047FF]">
-          You have <span className="font-bold">Free Shipping</span> available
-          for this order! Complete your purchase now to secure your items.
-        </p>
-      </div>
-
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Main Cart Section */}
-        <div className="flex-1 space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              Your Cart
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-bold text-muted-foreground">
-                {items.length}
-              </span>
-            </h1>
-            <Button variant="outline" size="sm" className="gap-2 h-9">
-              <Settings className="h-4 w-4" />
-              Actions
-            </Button>
-          </div>
-
+    <div className="bg-white min-h-screen">
+      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div className="space-y-4">
-            {items.map((item) => (
-              <Card
-                key={item.id}
-                className="overflow-hidden border-muted transition-all hover:shadow-md group"
-              >
-                <CardContent className="p-4 sm:p-6 flex flex-col sm:flex-row gap-6">
-                  {/* Checkbox (Visual only for now) */}
-                  <div className="hidden sm:flex items-start pt-2">
-                    <div className="h-5 w-5 rounded border-muted-foreground/30 border-2" />
-                  </div>
+            <Link href="/shop" className="group flex items-center gap-2 text-[10px] font-black text-[#999999] uppercase tracking-[0.2em] hover:text-[#1A1A1A] transition-colors">
+              <ChevronLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
+              Back to Shop
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[#1A1A1A] flex items-baseline gap-4">
+              Your Cart
+              <span className="text-lg font-bold text-[#E5E5E5] tabular-nums">({items.length})</span>
+            </h1>
+          </div>
+          
+          <div className="hidden lg:block w-full max-w-md">
+            <CheckoutSteps currentStep={1} steps={steps} />
+          </div>
+        </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Main Cart Items */}
+          <div className="lg:col-span-8 space-y-8">
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative bg-white rounded-[2rem] border border-[#F5F5F7] p-4 sm:p-6 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5 flex flex-col sm:flex-row gap-6"
+                >
                   {/* Product Image */}
-                  <div className="relative h-24 w-24 sm:h-32 sm:w-32 shrink-0 overflow-hidden rounded-xl border bg-muted self-center sm:self-start">
+                  <div className="relative h-32 w-32 sm:h-40 sm:w-40 shrink-0 overflow-hidden rounded-2xl bg-[#F5F5F7] self-center sm:self-start">
                     <Image
                       src={item.image}
                       alt={item.name}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     />
                   </div>
 
                   {/* Product Details */}
-                  <div className="flex-1 flex flex-col justify-between space-y-4">
-                    <div className="flex justify-between items-start gap-4">
-                      <div>
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex justify-between items-start gap-4 mb-2">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-black text-[#E5E5E5] uppercase tracking-[0.2em]">
+                          {item.category}
+                        </span>
                         <Link
                           href={`/products/${item.id}`}
-                          className="text-lg font-bold hover:text-[#0047FF] transition-colors line-clamp-1"
+                          className="block text-xl font-bold text-[#1A1A1A] hover:text-[#0047FF] transition-colors leading-tight"
                         >
                           {item.name}
                         </Link>
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {item.category}
-                        </p>
-
-                        {/* Add-ons / Features */}
-                        <div className="flex flex-wrap gap-3 mt-2">
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
-                            <ShieldCheck className="h-3.5 w-3.5 text-[#0047FF]" />
-                            Protection Plan
-                          </div>
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
-                            <RefreshCcw className="h-3.5 w-3.5 text-green-600" />
-                            30-Day Returns
-                          </div>
-                        </div>
                       </div>
-
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 -mt-2 -mr-2"
+                        className="h-10 w-10 rounded-full text-[#E5E5E5] hover:text-[#FF3B30] hover:bg-[#FF3B30]/5 transition-all"
                         onClick={() => removeFromCart(item.id)}
                       >
                         <Trash2 className="h-5 w-5" />
                       </Button>
                     </div>
 
+                    <div className="flex items-center gap-4 mb-6">
+                       <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#666666] bg-[#F5F5F7] px-3 py-1.5 rounded-full">
+                        <ShieldCheck className="h-3.5 w-3.5 text-[#1A1A1A]" />
+                        2Y WARRANTY
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#666666] bg-[#F5F5F7] px-3 py-1.5 rounded-full">
+                        <RefreshCcw className="h-3.5 w-3.5 text-[#1A1A1A]" />
+                        30D RETURNS
+                      </div>
+                    </div>
+
                     {/* Controls & Price */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
-                      <div className="flex items-center border rounded-lg bg-background shadow-sm">
+                    <div className="flex items-center justify-between mt-auto">
+                      <div className="flex items-center bg-[#F5F5F7] rounded-xl p-1">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-9 w-9 rounded-none hover:bg-muted"
+                          className="h-8 w-8 rounded-lg hover:bg-white hover:shadow-sm text-[#1A1A1A]"
                           onClick={() =>
                             updateQuantity(
                               item.id,
@@ -218,13 +183,13 @@ export default function CartPage() {
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
-                        <div className="w-12 text-center font-bold text-sm tabular-nums border-x h-9 flex items-center justify-center">
+                        <div className="w-10 text-center text-xs font-black text-[#1A1A1A] tabular-nums">
                           {item.quantity}
                         </div>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-9 w-9 rounded-none hover:bg-muted"
+                          className="h-8 w-8 rounded-lg hover:bg-white hover:shadow-sm text-[#1A1A1A]"
                           onClick={() =>
                             updateQuantity(item.id, item.quantity + 1)
                           }
@@ -233,97 +198,84 @@ export default function CartPage() {
                         </Button>
                       </div>
 
-                      <div className="text-xl font-bold text-right">
-                        ${(item.price * item.quantity).toFixed(2)}
+                      <div className="text-2xl font-black text-[#1A1A1A] tabular-nums">
+                        ${(item.price * item.quantity).toLocaleString()}
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              ))}
+            </div>
+
+            {/* Free Shipping Progress */}
+            <div className="bg-[#F5F5F7] rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="space-y-1 text-center md:text-left">
+                    <h3 className="text-sm font-black text-[#1A1A1A] uppercase tracking-widest">Free Shipping Unlocked</h3>
+                    <p className="text-xs text-[#666666]">Your order qualifies for complimentary express delivery.</p>
+                </div>
+                <div className="h-12 w-full md:w-48 bg-white rounded-2xl flex items-center justify-center border border-[#E5E5E5]">
+                    <span className="text-[10px] font-black text-[#1A1A1A] uppercase tracking-[0.2em]">Priority Shipping</span>
+                </div>
+            </div>
           </div>
-        </div>
 
-        {/* Order Summary Sidebar */}
-        <div className="w-full lg:w-96 shrink-0">
-          <div className="sticky top-24 space-y-6">
-            <Card className="shadow-lg border-muted/60 overflow-hidden">
-              <CardHeader className="bg-muted/30 pb-4 border-b">
-                <CardTitle className="text-xl font-bold">
-                  Order Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 space-y-6">
-                {/* Calculations */}
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-medium">${subtotal.toFixed(2)}</span>
+          {/* Order Summary Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="sticky top-24 space-y-6">
+              <div className="bg-[#F5F5F7] rounded-[2.5rem] p-8 text-[#1A1A1A]">
+                <h2 className="text-2xl font-black tracking-tight mb-8">Summary</h2>
+                
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[11px] font-black text-[#666666] uppercase tracking-widest">Subtotal</span>
+                    <span className="text-lg font-bold tabular-nums">${subtotal.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Shipping</span>
-                    <span className="text-green-600 font-bold">Free</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[11px] font-black text-[#666666] uppercase tracking-widest">Shipping</span>
+                    <span className="text-[11px] font-black text-[#0047FF] uppercase tracking-widest bg-white px-2 py-0.5 rounded border border-[#E5E5E5]">Free</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Estimated Tax</span>
-                    <span className="text-muted-foreground">
-                      Calculated next step
-                    </span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[11px] font-black text-[#666666] uppercase tracking-widest">Est. Taxes</span>
+                    <span className="text-[11px] font-bold text-[#666666] italic">Calculated at checkout</span>
                   </div>
                 </div>
 
-                {/* Promo Code Input */}
-                <div className="pt-2">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start px-0 text-[#0047FF] hover:text-[#0047FF]/80 hover:bg-transparent h-auto p-0 font-semibold gap-2"
-                  >
-                    <Tag className="h-4 w-4" />
-                    Add a discount code
-                  </Button>
-                  {/* <div className="flex gap-2 mt-2">
-                        <Input placeholder="Enter code" className="bg-muted/20" />
-                        <Button variant="secondary">Apply</Button>
-                    </div> */}
+                <div className="h-px bg-[#E5E5E5] mb-8" />
+
+                <div className="flex justify-between items-end mb-8">
+                  <span className="text-[11px] font-black text-[#666666] uppercase tracking-widest pb-1">Total due</span>
+                  <span className="text-4xl font-black tabular-nums tracking-tighter">
+                    ${total.toLocaleString()}
+                  </span>
                 </div>
 
-                <Separator />
-
-                {/* Total */}
-                <div className="flex justify-between items-end">
-                  <span className="text-lg font-bold">Total due</span>
-                  <div className="text-right">
-                    <span className="text-3xl font-black tracking-tight">
-                      ${total.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Checkout Button */}
                 <Link href="/checkout" className="block">
                   <Button
-                    size="lg"
-                    className="w-full h-14 text-lg font-bold rounded-xl bg-[#0047FF] hover:bg-[#0047FF]/90 shadow-lg shadow-[#0047FF]/20 transition-all hover:scale-[1.02]"
+                    className="w-full h-16 rounded-2xl bg-[#1A1A1A] text-white text-[12px] font-black uppercase tracking-widest hover:bg-[#333333] transition-all group shadow-xl shadow-black/5"
                   >
-                    Go to Checkout
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    Proceed to Checkout
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
 
-                <p className="text-xs text-center text-muted-foreground px-4">
-                  By proceeding, you agree to our Terms of Service and Privacy
-                  Policy.
+                <p className="text-[9px] text-center text-[#999999] uppercase tracking-widest mt-6 leading-relaxed">
+                  SECURE CHECKOUT POWERED BY ATLAS NODE
                 </p>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Trust Badges */}
-            <div className="flex justify-center gap-6 grayscale opacity-60">
-              {/* Placeholders for payment icons */}
-              <div className="h-6 w-10 bg-muted rounded" />
-              <div className="h-6 w-10 bg-muted rounded" />
-              <div className="h-6 w-10 bg-muted rounded" />
-              <div className="h-6 w-10 bg-muted rounded" />
+              {/* Promo Code Card */}
+              <div className="bg-white rounded-[2rem] border border-[#F5F5F7] p-8 flex items-center justify-between group cursor-pointer hover:border-[#E5E5E7] transition-all">
+                <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 bg-[#F5F5F7] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Tag className="h-5 w-5 text-[#1A1A1A]" />
+                    </div>
+                    <div>
+                        <h4 className="text-xs font-black text-[#1A1A1A] uppercase tracking-widest">Promo Code</h4>
+                        <p className="text-[10px] text-[#666666]">Add a discount to your order</p>
+                    </div>
+                </div>
+                <Plus className="h-5 w-5 text-[#E5E5E5] group-hover:text-[#1A1A1A] transition-colors" />
+              </div>
             </div>
           </div>
         </div>
