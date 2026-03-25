@@ -59,7 +59,7 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-white min-h-[80vh] flex items-center justify-center px-4">
+      <div className="bg-white min-h-[80vh] sm:py-20 flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center space-y-8 animate-in fade-in zoom-in duration-700">
           <div className="relative mx-auto h-40 w-40 bg-[#F5F5F7] rounded-full flex items-center justify-center">
             <ShoppingBag className="h-16 w-16 text-[#1A1A1A] opacity-20" />
