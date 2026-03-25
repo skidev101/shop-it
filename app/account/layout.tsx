@@ -38,8 +38,9 @@ export default function AccountLayout({
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12">
+      <div className="px-4 lg:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-12">
+
           {/* Sidebar */}
           <aside className="w-full lg:w-64 shrink-0">
             <div className="space-y-8 sticky top-24">
