@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Package, 
@@ -12,6 +12,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/use-auth';
 
 const sidebarLinks = [
   { href: '/account', label: 'Dashboard', icon: LayoutDashboard },
@@ -27,6 +28,13 @@ export default function AccountLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout, user } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/auth/login');
+  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -37,7 +45,7 @@ export default function AccountLayout({
             <div className="space-y-8 sticky top-24">
               <div>
                 <h1 className="text-2xl font-black tracking-tight text-[#1A1A1A] mb-1">My Account</h1>
-                <p className="text-[10px] font-bold text-[#999999] uppercase tracking-widest">Customer ID: #8829-AT</p>
+                <p className="text-[10px] font-bold text-[#999999] uppercase tracking-widest">Customer ID: {user?.id ? `#${user.id.slice(0, 4)}-AT` : '#8829-AT'}</p>
               </div>
 
               <nav className="flex flex-col gap-1">
@@ -63,7 +71,10 @@ export default function AccountLayout({
                   );
                 })}
                 
-                <button className="flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all mt-4">
+                <button 
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all mt-4 w-full"
+                >
                   <LogOut className="h-4 w-4" />
                   <span className="text-[13px] font-bold">Sign Out</span>
                 </button>
