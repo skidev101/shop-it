@@ -41,7 +41,7 @@ export default function VerifyOTPPage() {
         </div>
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-bold text-[#1A1A1A] tracking-tight">
-            Check your email an otp
+            Check your email
           </h2>
           <p className="text-sm text-[#666666] max-w-[320px] mx-auto">
             We&apos;ve sent a 6-digit verification code to your registered email address.
