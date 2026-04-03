@@ -9,8 +9,10 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-[#F9F9FB] font-sans">
       <AdminSidebar />
+
       <div className="pl-[280px]">
         <AdminHeader />
+
         <main className="pt-[90px] p-10 min-h-[calc(100vh-90px)]">
           {children}
         </main>
