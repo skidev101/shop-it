@@ -29,7 +29,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          <main className="flex-1 max-w-500 mx-auto">
+          <main className="flex-1 max-w-500">
             {children}
             <Toaster position="top-right" richColors />
           </main>

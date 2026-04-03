@@ -87,13 +87,13 @@ export default function AccountDashboard() {
   const { user } = useAuth();
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 w-full">
       {/* Welcome Header */}
       <section>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 w-full">
           <div>
             <h2 className="text-4xl font-black tracking-tight text-[#1A1A1A] mb-2">
-              Welcome back, {user?.firstName?.split(' ')[0] || 'Member'}
+              Welcome back, {user?.firstName || 'Member'}
             </h2>
             <p className="text-[#666666] text-sm font-medium">
               Check your latest updates and manage your account settings here.
@@ -205,7 +205,7 @@ export default function AccountDashboard() {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="h-16 w-16 rounded-2xl bg-[#F5F5F7] flex items-center justify-center text-2xl font-black text-[#1A1A1A]">
-                  {user?.firstName?.[0] || 'M'}
+                  {user?.firstName || 'M'}
                 </div>
                 <div>
                   <h4 className="text-base font-black text-[#1A1A1A]">{user?.firstName || 'Member'}</h4>

@@ -48,7 +48,7 @@ export default function ProfilePage() {
                             <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999999]" />
                             <Input 
                                 id="firstName"
-                                defaultValue={user?.name?.split(' ')[0] || ''} 
+                                defaultValue={user?.firstName?.split(' ')[0] || ''} 
                                 className="h-12 pl-11 rounded-xl border-[#E5E5E5] bg-white focus-visible:ring-[#1A1A1A] font-medium"
                             />
                         </div>
@@ -59,7 +59,7 @@ export default function ProfilePage() {
                             <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999999]" />
                             <Input 
                                 id="lastName"
-                                defaultValue={user?.name?.split(' ').slice(1).join(' ') || ''} 
+                                defaultValue={user?.lastName?.split(' ').slice(1).join(' ') || ''} 
                                 className="h-12 pl-11 rounded-xl border-[#E5E5E5] bg-white focus-visible:ring-[#1A1A1A] font-medium"
                             />
                         </div>
@@ -134,13 +134,13 @@ export default function ProfilePage() {
                 <CardContent className="p-8 flex flex-col items-center">
                     <div className="relative group mb-6">
                         <div className="h-32 w-32 rounded-3xl bg-[#F5F5F7] flex items-center justify-center text-4xl font-black text-[#1A1A1A] border-4 border-white shadow-xl overflow-hidden">
-                            {user?.name?.[0] || 'M'}
+                            {user?.firstName?.[0] || 'M'}
                         </div>
                         <button className="absolute -bottom-2 -right-2 h-10 w-10 bg-[#1A1A1A] text-white rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                             <Camera className="h-4 w-4" />
                         </button>
                     </div>
-                    <h4 className="text-lg font-black text-[#1A1A1A] mb-1">{user?.name || 'Member'}</h4>
+                    <h4 className="text-lg font-black text-[#1A1A1A] mb-1">{user?.firstName || 'Member'}</h4>
                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#999999]">Pro Member</p>
                     
                     <div className="w-full mt-8 pt-8 border-t border-[#F5F5F7] space-y-4">
