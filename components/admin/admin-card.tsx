@@ -38,6 +38,7 @@ export function AdminCard({
           </div>
           {headerAction}
         </CardHeader>
+        
       )}
       <CardContent className={cn("px-7 pb-7", contentClassName)}>
         {children}

@@ -44,6 +44,7 @@ export function AdminSidebar() {
           Cartographic Authority
         </p>
       </div>
+      bg-
 
       {/* Navigation Links */}
       <nav className="flex-1 px-4 mt-4 space-y-1 overflow-y-auto">

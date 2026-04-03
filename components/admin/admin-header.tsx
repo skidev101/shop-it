@@ -15,6 +15,7 @@ export function AdminHeader() {
           className="h-12 pl-12 pr-4 bg-[#F5F5F7] border-none rounded-2xl text-[13px] font-bold focus-visible:ring-1 focus-visible:ring-[#1A1A1A] transition-all"
         />
       </div>
+      
 
       {/* Right Actions */}
       <div className="flex items-center gap-8">
@@ -32,7 +33,7 @@ export function AdminHeader() {
         </div>
 
         <div className="h-8 w-[1px] bg-[#E5E5E5]" />
-
+ 
         {/* User Profile */}
         <div className="flex items-center gap-4">
           <div className="text-right">
