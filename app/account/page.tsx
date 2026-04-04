@@ -1,10 +1,10 @@
 'use client';
 
 import { useAuth } from "@/hooks/use-auth";
-import { 
-  Package, 
-  Heart, 
-  MapPin, 
+import {
+  Package,
+  Heart,
+  MapPin,
   CreditCard,
   ChevronRight,
   Clock,
@@ -17,16 +17,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 // Reusable Stat Card for Account Dashboard
-function AccountStatCard({ 
-  label, 
-  value, 
-  icon: Icon, 
+function AccountStatCard({
+  label,
+  value,
+  icon: Icon,
   href,
-  className 
-}: { 
-  label: string; 
-  value: string | number; 
-  icon: any; 
+  className
+}: {
+  label: string;
+  value: string | number;
+  icon: any;
   href: string;
   className?: string;
 }) {
@@ -45,6 +45,19 @@ function AccountStatCard({
             </div>
             <div className="p-3 rounded-2xl bg-white text-[#1A1A1A] group-hover:bg-white/10 group-hover:text-white transition-all duration-300">
               <Icon className="h-5 w-5" />
+            </div>
+          </div>
+          <div>
+            hello world
+
+            <div>
+              hello world
+            </div>
+            <div>
+              <div>
+                hello world
+              </div>
+              hello
             </div>
           </div>
         </CardContent>
@@ -100,42 +113,42 @@ export default function AccountDashboard() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-             <div className="text-right hidden sm:block">
-                <p className="text-[10px] font-black uppercase tracking-widest text-[#999999] mb-1">Current Points</p>
-                <p className="text-lg font-black text-[#1A1A1A]">2,450 <span className="text-[10px] text-[#999999]">PTS</span></p>
-             </div>
-             <Button variant="outline" className="h-12 px-6 rounded-xl border-[#E5E5E5] text-[11px] font-black uppercase tracking-widest hover:bg-[#1A1A1A] hover:text-white transition-all">
-                Earn More
-             </Button>
+            <div className="text-right hidden sm:block">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#999999] mb-1">Current Points</p>
+              <p className="text-lg font-black text-[#1A1A1A]">2,450 <span className="text-[10px] text-[#999999]">PTS</span></p>
+            </div>
+            <Button variant="outline" className="h-12 px-6 rounded-xl border-[#E5E5E5] text-[11px] font-black uppercase tracking-widest hover:bg-[#1A1A1A] hover:text-white transition-all">
+              Earn More
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Stats Grid */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        <AccountStatCard 
-          label="Total Orders" 
-          value={12} 
-          icon={Package} 
-          href="/account/orders" 
+        <AccountStatCard
+          label="Total Orders"
+          value={12}
+          icon={Package}
+          href="/account/orders"
         />
-        <AccountStatCard 
-          label="Wishlist Items" 
-          value={8} 
-          icon={Heart} 
-          href="/account/wishlist" 
+        <AccountStatCard
+          label="Wishlist Items"
+          value={8}
+          icon={Heart}
+          href="/account/wishlist"
         />
-        <AccountStatCard 
-          label="Saved Addresses" 
-          value={2} 
-          icon={MapPin} 
-          href="/account/addresses" 
+        <AccountStatCard
+          label="Saved Addresses"
+          value={2}
+          icon={MapPin}
+          href="/account/addresses"
         />
-        <AccountStatCard 
-          label="Payment Methods" 
-          value={1} 
-          icon={CreditCard} 
-          href="/account/profile" 
+        <AccountStatCard
+          label="Payment Methods"
+          value={1}
+          icon={CreditCard}
+          href="/account/profile"
         />
       </section>
 
@@ -201,7 +214,7 @@ export default function AccountDashboard() {
               <h3 className="text-lg font-bold">Profile Summary</h3>
               <Link href="/account/profile" className="text-[10px] font-black uppercase tracking-widest text-[#999999] hover:text-[#1A1A1A]">Edit</Link>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="h-16 w-16 rounded-2xl bg-[#F5F5F7] flex items-center justify-center text-2xl font-black text-[#1A1A1A]">
@@ -212,7 +225,7 @@ export default function AccountDashboard() {
                   <p className="text-[12px] font-medium text-[#666666]">{user?.email || 'member@atlas.com'}</p>
                 </div>
               </div>
-              
+
               <div className="pt-4 border-t border-[#F5F5F7] space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] font-bold text-[#999999] uppercase tracking-wider">Member Since</span>
@@ -230,7 +243,7 @@ export default function AccountDashboard() {
         <Card className="border-[#F5F5F7] rounded-2xl overflow-hidden shadow-none bg-[#F5F5F7]/30">
           <CardContent className="p-8 space-y-6">
             <h3 className="text-lg font-bold">Account Security</h3>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-white rounded-xl border border-[#F5F5F7]">
                 <div className="flex items-center gap-3">
