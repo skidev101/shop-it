@@ -21,6 +21,7 @@ export function Header() {
   const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isAccountPage = pathname.startsWith("/account")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,17 +83,18 @@ export function Header() {
             </Link>
 
             {/* Desktop Main Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
+            {!isAccountPage && (
+              <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href));
                 return (
-                  <Link 
+                  <Link
                     key={link.label}
-                    href={link.href} 
+                    href={link.href}
                     className={cn(
                       "text-[15px] font-medium transition-colors relative h-full flex items-center",
-                      isActive 
-                        ? "text-[#1A1A1A] after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-[#1A1A1A]" 
+                      isActive
+                        ? "text-[#1A1A1A] after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-[#1A1A1A]"
                         : "text-[#666666] hover:text-[#1A1A1A]"
                     )}
                   >
@@ -101,6 +103,8 @@ export function Header() {
                 );
               })}
             </nav>
+            )}
+
 
             {/* Search and Actions */}
             <div className="flex flex-1 items-center justify-end gap-2 sm:gap-6 max-w-md">

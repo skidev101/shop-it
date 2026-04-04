@@ -47,22 +47,10 @@ function AccountStatCard({
               <Icon className="h-5 w-5" />
             </div>
           </div>
-          <div>
-            hello world
 
-            <div>
-              hello world
-            </div>
-            <div>
-              <div>
-                hello world
-              </div>
-              hello
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+      </CardContent>
+    </Card>
+    </Link >
   );
 }
 

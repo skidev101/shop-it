@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuth } from "@/hooks/use-auth";
 import {
   LayoutDashboard,
@@ -24,6 +26,7 @@ export default function AccountSidebar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const isAccountPage = pathname.startsWith("/account")
 
   const handleLogout = () => {
     logout();
@@ -33,14 +36,14 @@ export default function AccountSidebar() {
   return (
     <aside className="w-full lg:w-64 shrink-0">
       <div className="space-y-8 sticky top-24">
-        <div>
+        {/*<div>
           <h1 className="text-2xl font-black tracking-tight text-[#1A1A1A] mb-1">
             My Account
           </h1>
           <p className="text-[10px] font-bold text-[#999999] uppercase tracking-widest">
             Customer ID: {user?.id ? `#${user.id.slice(0, 4)}-AT` : "#8829-AT"}
           </p>
-        </div>
+        </div>*/}
 
         <nav className="flex flex-col gap-1">
           {sidebarLinks.map((link) => {
