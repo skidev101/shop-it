@@ -10,9 +10,12 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const sidebarLinks = [
   { href: "/account", label: "Dashboard", icon: LayoutDashboard },
@@ -23,10 +26,10 @@ const sidebarLinks = [
 ];
 
 export default function AccountSidebar() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const isAccountPage = pathname.startsWith("/account")
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleLogout = () => {
     logout();
@@ -34,18 +37,30 @@ export default function AccountSidebar() {
   };
 
   return (
-    <aside className="w-full lg:w-64 shrink-0">
-      <div className="space-y-8 sticky top-24">
-        {/*<div>
-          <h1 className="text-2xl font-black tracking-tight text-[#1A1A1A] mb-1">
-            My Account
-          </h1>
-          <p className="text-[10px] font-bold text-[#999999] uppercase tracking-widest">
-            Customer ID: {user?.id ? `#${user.id.slice(0, 4)}-AT` : "#8829-AT"}
-          </p>
-        </div>*/}
+    <aside
+      className={cn(
+        "hidden lg:flex flex-col h-[100vh] sticky top-5 transition-all duration-200 ease-in-out border-r border-gray-100 bg-white overflow-hidden",
+        isOpen ? "w-64" : "w-20",
+      )}
+    >
+      <div className="flex flex-col h-full p-4">
+        {/* Toggle Button */}
+        <div
+          className={cn("flex mb-6", isOpen ? "justify-end" : "justify-center")}
+        >
+          <Button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-xl bg-transparent hover:bg-gray-50 text-gray-400 hover:text-black transition-colors"
+          >
+            {isOpen ? (
+              <CaretLeft size={20} weight="bold" />
+            ) : (
+              <CaretRight size={20} weight="bold" />
+            )}
+          </Button>
+        </div>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex-1 flex flex-col gap-1">
           {sidebarLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -53,53 +68,63 @@ export default function AccountSidebar() {
                 key={link.label}
                 href={link.href}
                 className={cn(
-                  "group flex items-center justify-between p-3 rounded-xl transition-all",
+                  "group flex items-center p-3 rounded-xl transition-all",
                   isActive
                     ? "bg-[#F5F5F7] text-[#1A1A1A]"
                     : "text-[#666666] hover:bg-[#F5F5F7]/50 hover:text-[#1A1A1A]",
+                  !isOpen && "justify-center",
                 )}
               >
                 <div className="flex items-center gap-3">
                   <link.icon
                     className={cn(
-                      "h-4 w-4",
+                      "h-4 w-4 shrink-0",
                       isActive ? "text-[#1A1A1A]" : "text-[#999999]",
                     )}
                   />
-                  <span className="text-[13px] font-bold">{link.label}</span>
-                </div>
-                <ChevronRight
-                  className={cn(
-                    "h-3 w-3 transition-transform",
-                    isActive
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+                  {isOpen && (
+                    <span className="text-[13px] font-bold">{link.label}</span>
                   )}
-                />
+                </div>
+                {isOpen && (
+                  <ChevronRight
+                    className={cn(
+                      "h-3 w-3 ml-auto transition-transform",
+                      isActive
+                        ? "translate-x-0 opacity-100"
+                        : "-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+                    )}
+                  />
+                )}
               </Link>
             );
           })}
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all mt-4 w-full"
+            className={cn(
+              "flex items-center gap-3 p-3 rounded-xl text-red-500 hover:bg-red-50 transition-all mt-4 w-full",
+              !isOpen && "justify-center",
+            )}
           >
-            <LogOut className="h-4 w-4" />
-            <span className="text-[13px] font-bold">Sign Out</span>
+            <LogOut className="h-4 w-4 shrink-0" />
+            {isOpen && <span className="text-[13px] font-bold">Sign Out</span>}
           </button>
         </nav>
 
-        <div className="p-6 bg-[#1A1A1A] rounded-2xl text-white space-y-4">
-          <h4 className="text-xs font-black uppercase tracking-widest">
-            Atlas Elite
-          </h4>
-          <p className="text-[10px] text-white/60 leading-relaxed">
-            You are 2 orders away from unlocking Premium Shipping.
-          </p>
-          <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-white w-[60%]" />
+        {isOpen && (
+          <div className="mt-auto p-5 bg-[#1A1A1A] rounded-2xl text-white space-y-4">
+            <h4 className="text-xs font-black uppercase tracking-widest">
+              Atlas Elite
+            </h4>
+            <p className="text-[10px] text-white/60 leading-relaxed">
+              You are 2 orders away from unlocking Premium Shipping.
+            </p>
+            <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-full bg-white w-[60%]" />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </aside>
   );

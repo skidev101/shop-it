@@ -4,13 +4,12 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import Providers from "./providers";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
 
 export const metadata: Metadata = {
   title: "ShopIt",
@@ -29,10 +28,12 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
+
           <main className="flex-1 max-w-500">
             {children}
             <Toaster position="top-right" richColors />
           </main>
+
           <Footer />
         </Providers>
       </body>
