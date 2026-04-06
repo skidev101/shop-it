@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, ShoppingBag, Globe } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { DynamicBreadcrumb } from "../breadcrumbs";
+import { DynamicBreadcrumb } from "../breadcrumbs-list";
 
 export function AccountHeader() {
   return (

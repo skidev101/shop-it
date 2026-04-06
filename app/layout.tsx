@@ -27,14 +27,10 @@ export default function RootLayout({
         className={`${manrope.variable} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
-          <Header />
-
           <main className="flex-1 max-w-500">
             {children}
             <Toaster position="top-right" richColors />
           </main>
-
-          <Footer />
         </Providers>
       </body>
     </html>
