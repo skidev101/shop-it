@@ -12,6 +12,7 @@ import {
   AlertCircle,
   BarChart3,
 } from "lucide-react";
+import Link from "next/link";
 import { StatCard } from "@/components/admin/stat-card";
 import { AdminCard } from "@/components/admin/admin-card";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -81,10 +82,12 @@ export default function VendorDashboard() {
             Performance metrics for Vanguard Gear.
           </p>
         </div>
-        <Button className="bg-[#1A1A1A] text-white hover:bg-[#333333] rounded-xl px-6 h-12 text-[12px] font-black uppercase tracking-widest gap-2">
-          <Package className="h-4 w-4" />
-          Add Product
-        </Button>
+        <Link href="/vendor/products/new">
+          <Button className="bg-[#1A1A1A] text-white hover:bg-[#333333] rounded-xl px-6 h-12 text-[12px] font-black uppercase tracking-widest gap-2">
+            <Package className="h-4 w-4" />
+            Add Product
+          </Button>
+        </Link>
       </div>
 
       {/* KPI Stats */}

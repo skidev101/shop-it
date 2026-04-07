@@ -1,12 +1,19 @@
 "use client";
 
-import { Search, Bell, Settings, HelpCircle, ShoppingBag, Menu } from "lucide-react";
+import {
+  Search,
+  Bell,
+  Settings,
+  HelpCircle,
+  ShoppingBag,
+  Menu,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { NotificationsPanel } from "./dashboard/notifications-panel";
-import { UserProfileMenu } from "./dashboard/user-profile-menu";
+import { NotificationsPanel } from "../dashboard/notifications-panel";
+import { UserProfileMenu } from "../dashboard/user-profile-menu";
 import { useState } from "react";
 
 interface DashboardHeaderProps {
@@ -43,10 +50,12 @@ export function DashboardHeader({
   };
 
   return (
-    <header className={cn(
-      "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-[#F0F0F0] flex items-center justify-between px-6 lg:px-10 py-4",
-      className
-    )}>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-[#F0F0F0] flex items-center justify-between px-6 lg:px-10 py-4",
+        className,
+      )}
+    >
       {/* Mobile Menu Toggle (can be handled by parent if needed) */}
       <div className="lg:hidden mr-4">
         <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -55,7 +64,10 @@ export function DashboardHeader({
       </div>
 
       {/* Search Bar */}
-      <form onSubmit={handleSearch} className="relative w-full max-w-[600px] lg:-ml-2 group hidden sm:block">
+      <form
+        onSubmit={handleSearch}
+        className="relative w-full max-w-[600px] lg:-ml-2 group hidden sm:block"
+      >
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-gray-400 group-focus-within:text-[#1A1A1A] transition-colors" />
         <Input
           placeholder={searchPlaceholder}
@@ -71,7 +83,7 @@ export function DashboardHeader({
       <div className="flex items-center gap-4 lg:gap-8">
         <div className="flex items-center gap-2 lg:gap-6 text-[#999999]">
           <NotificationsPanel />
-          
+
           <button className="hidden lg:block p-2 hover:text-[#1A1A1A] hover:cursor-pointer transition-colors">
             <HelpCircle className="h-5 w-5" />
           </button>
@@ -91,7 +103,7 @@ export function DashboardHeader({
         <div className="h-8 w-[1px] bg-[#E5E5E5] hidden lg:block" />
 
         {/* User Profile */}
-        <UserProfileMenu 
+        <UserProfileMenu
           userName={userName}
           userRole={userRole}
           userAvatar={userAvatar}

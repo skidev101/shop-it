@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/shared/footer";
 import Providers from "./providers";
 import { Toaster } from "sonner";
 

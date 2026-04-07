@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { DynamicBreadcrumb } from "../breadcrumbs-list";
+import { DynamicBreadcrumb } from "../shared/breadcrumbs-list";
 
 interface Props {
 	title: string;

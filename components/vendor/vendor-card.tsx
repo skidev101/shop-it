@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Star, Heart, CheckCircle2 } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 export interface VendorCardProps {
   id: string;

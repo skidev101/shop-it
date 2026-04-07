@@ -2,8 +2,8 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { Search, ShoppingCart, User, ShoppingBag, Menu, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";

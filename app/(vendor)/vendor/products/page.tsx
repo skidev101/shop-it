@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Search, Filter, MoreVertical, Edit2, Trash2, Eye } from "lucide-react";
+import Link from "next/link";
 import { AdminCard } from "@/components/admin/admin-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,10 +72,12 @@ export default function VendorProducts() {
             Manage your store's inventory and listings.
           </p>
         </div>
-        <Button className="bg-[#1A1A1A] text-white hover:bg-[#333333] rounded-xl px-6 h-12 text-[12px] font-black uppercase tracking-widest gap-2 w-full sm:w-auto">
-          <Plus className="h-4 w-4" />
-          Add New Product
-        </Button>
+        <Link href="/vendor/products/new" className="w-full sm:w-auto">
+          <Button className="bg-[#1A1A1A] text-white hover:bg-[#333333] rounded-xl px-6 h-12 text-[12px] font-black uppercase tracking-widest gap-2 w-full">
+            <Plus className="h-4 w-4" />
+            Add New Product
+          </Button>
+        </Link>
       </div>
 
       <AdminCard>
@@ -141,10 +144,19 @@ export default function VendorProducts() {
                         <DropdownMenuItem className="flex items-center gap-3 p-3 rounded-lg text-[11px] font-black uppercase tracking-widest cursor-pointer hover:bg-[#F5F5F7]">
                           <Eye className="h-4 w-4" /> View
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center gap-3 p-3 rounded-lg text-[11px] font-black uppercase tracking-widest cursor-pointer hover:bg-[#F5F5F7]">
-                          <Edit2 className="h-4 w-4" /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center gap-3 p-3 rounded-lg text-[11px] font-black uppercase tracking-widest cursor-pointer text-rose-600 hover:bg-rose-50">
+                        <Link href={`/vendor/products/${product.id}/edit`}>
+                          <DropdownMenuItem className="flex items-center gap-3 p-3 rounded-lg text-[11px] font-black uppercase tracking-widest cursor-pointer hover:bg-[#F5F5F7]">
+                            <Edit2 className="h-4 w-4" /> Edit
+                          </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuItem 
+                          onClick={() => {
+                            if (confirm("Are you sure you want to delete this product?")) {
+                              // handleDelete(product.id)
+                            }
+                          }}
+                          className="flex items-center gap-3 p-3 rounded-lg text-[11px] font-black uppercase tracking-widest cursor-pointer text-rose-600 hover:bg-rose-50"
+                        >
                           <Trash2 className="h-4 w-4" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>

@@ -1,6 +1,5 @@
 "use client";
 
-import AccountPageHeader from "@/components/account/account-page-header";
 import { useAuth } from "@/hooks/use-auth";
 import { User, Mail, Phone, Camera, Shield, Key, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import AccountPageHeader from "@/components/account/account-page-header";
 
 const steps = [
     { label: "Account", href: "/account" },

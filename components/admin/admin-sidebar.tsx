@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const MENU_ITEMS = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Merchants", href: "/admin/merchants", icon: Store },
   { label: "Payments", href: "/admin/payments", icon: CreditCard },
@@ -40,7 +40,7 @@ export function AdminSidebar() {
     <aside
       className={cn(
         "border-r border-gray-100 bg-white flex flex-col transition-all duration-300 ease-in-out h-screen sticky top-0 overflow-hidden",
-        isOpen ? "w-64" : "w-20",
+        isOpen ? "w-64" : "w-16",
       )}
     >
       {/* Brand Header */}
@@ -82,7 +82,7 @@ export function AdminSidebar() {
                 isActive
                   ? "bg-[#F5F5F7] text-[#1A1A1A]"
                   : "text-[#666666] hover:bg-[#F5F5F7]/50 hover:text-[#1A1A1A]",
-                !isOpen && "justify-center",
+                !isOpen && "justify-start",
               )}
             >
               <div className="flex items-center gap-3.5">
@@ -117,8 +117,8 @@ export function AdminSidebar() {
         <Button
           variant="ghost"
           className={cn(
-            "w-full flex items-center gap-3 px-4 py-2 text-[#999999] hover:text-[#1A1A1A] transition-colors group justify-start",
-            !isOpen && "justify-center px-0",
+            "w-full flex items-center gap-3 py-4 text-[#999999] hover:text-[#1A1A1A] transition-colors group justify-start rounded-xl",
+            !isOpen && "justify-center",
           )}
         >
           <HelpCircle className="h-4 w-4 shrink-0" />
@@ -131,8 +131,8 @@ export function AdminSidebar() {
         <Button
           variant="ghost"
           className={cn(
-            "w-full flex items-center gap-3 px-4 py-2 text-[#999999] hover:text-rose-600 transition-colors group justify-start",
-            !isOpen && "justify-center px-0",
+            "w-full flex items-center gap-3 py-4 text-[#999999] hover:text-rose-600 transition-colors group justify-start rounded-xl",
+            !isOpen && "justify-center",
           )}
         >
           <LogOut className="h-4 w-4 shrink-0" />

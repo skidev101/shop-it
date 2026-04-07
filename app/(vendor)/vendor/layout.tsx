@@ -1,5 +1,5 @@
 import { VendorSidebar } from "@/components/vendor/vendor-sidebar";
-import { DashboardHeader } from "@/components/dashboard-header";
+import { DashboardHeader } from "@/components/shared/dashboard-header";
 
 export default function VendorLayout({
   children,
@@ -11,7 +11,7 @@ export default function VendorLayout({
       <VendorSidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
-        <DashboardHeader 
+        <DashboardHeader
           searchPlaceholder="Search products, orders, or customers..."
           userName="Vanguard Gear"
           userRole="Verified Merchant"

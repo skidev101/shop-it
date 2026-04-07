@@ -1,6 +1,6 @@
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import { DashboardHeader } from "@/components/dashboard-header";
-import { Footer } from "@/components/footer";
+import { DashboardHeader } from "@/components/shared/dashboard-header";
+import { Footer } from "@/components/shared/footer";
 
 export default function AdminLayout({
   children,
@@ -12,7 +12,7 @@ export default function AdminLayout({
       <AdminSidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
-        <DashboardHeader 
+        <DashboardHeader
           searchPlaceholder="Search system entities, transactions, or logs..."
           userName="Admin Authority"
           userRole="Superuser Access"
