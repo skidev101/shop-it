@@ -103,8 +103,68 @@ export default function AdminDashboard() {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-4 gap-6">
+      <div className="flex items-center justify-between gap-3">
+        {/* <div className="w-full flex flex-col justify-between rounded-xl bg-[#1A1A1A]">
+          <div className="flex justify-between">
+            <div className="flex flex-col gap-3">
+              <p>Gross Plaform Value</p>
+              <h1 className="text-white">$984,234.0</h1>
+            </div>
+          </div>
+        </div>*/}
         <StatCard
+          label="Gross Platform Volume"
+          value="$984,234.0"
+          trend={{ value: "12.4%", isUp: true }}
+          secondaryLabel="vs last month"
+          variant="accent"
+          icon={CreditCard}
+          className="w-full h-full py-8"
+        />
+
+        <div className="w-full grid grid-cols-2 gap-3">
+          <StatCard
+            label="Active Vendors"
+            value="1,284"
+            trend={{ value: "+42", isUp: true }}
+            secondaryLabel="this week"
+            icon={Store}
+            className="w-full"
+          />
+
+          <div className="flex flex-col gap-3 w-full">
+            <div className="group w-full flex items-center justify-between bg-card p-6 rounded-xl ring-1 ring-foreground/10">
+              <div className="flex flex-col gap-2">
+                <h1 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#999999]">
+                  NEW USERS
+                </h1>
+                <p className="text-md font-black tracking-tight text-[#1A1A1A]">
+                  842
+                </p>
+              </div>
+
+              <div className="group-hover:bg-black p-3 rounded-2xl transition-all duration-300 bg-[#F5F5F7] text-[#1A1A1A] group-hover:bg-[#1A1A1A] group-hover:text-white">
+                <Users className="h-5 w-5" />
+              </div>
+            </div>
+
+            <div className="group w-full flex items-center justify-between bg-card p-6 rounded-xl ring-1 ring-foreground/10">
+              <div className="flex flex-col gap-2">
+                <h1 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#999999]">
+                  OPEN DISPUTES
+                </h1>
+                <p className="text-md font-black tracking-tight text-red-500">
+                  2
+                </p>
+              </div>
+
+              <div className="group-hover:bg-black p-3 rounded-2xl transition-all duration-300 bg-[#F5F5F7] text-red-500 group-hover:bg-[#1A1A1A] group-hover:text-white">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/*<StatCard
           label="Gross Platform Volume"
           value="$984,234.0"
           trend={{ value: "12.4%", isUp: true }}
@@ -125,7 +185,7 @@ export default function AdminDashboard() {
           value="12"
           icon={AlertTriangle}
           className="border-rose-100"
-        />
+        />*/}
       </div>
 
       <div className="grid grid-cols-12 gap-8">
