@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -20,7 +21,7 @@ interface DynamicBreadcrumbProps {
 
 export function DynamicBreadcrumb({ steps }: DynamicBreadcrumbProps) {
 	return (
-		<Breadcrumb className="hidden md:block ml-4">
+		<Breadcrumb className="hidden md:block -mt-4 pb-6 ml-1">
 			<BreadcrumbList>
 				<BreadcrumbItem>
 					<BreadcrumbLink
@@ -32,9 +33,9 @@ export function DynamicBreadcrumb({ steps }: DynamicBreadcrumbProps) {
 				</BreadcrumbItem>
 
 				{steps.map((step, index) => (
-					<div key={index}>
+					<React.Fragment key={index}>
 						<BreadcrumbSeparator className="text-muted-foreground/40 font-thin">
-							/
+							{`>`}
 						</BreadcrumbSeparator>
 						<BreadcrumbItem>
 							{step.isCurrent ? (
@@ -50,7 +51,7 @@ export function DynamicBreadcrumb({ steps }: DynamicBreadcrumbProps) {
 								</BreadcrumbLink>
 							)}
 						</BreadcrumbItem>
-					</div>
+					</React.Fragment>
 				))}
 			</BreadcrumbList>
 		</Breadcrumb>

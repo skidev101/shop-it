@@ -39,15 +39,25 @@ export default function AccountSidebar() {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col h-[100vh] sticky top-5 transition-all duration-200 ease-in-out border-r border-gray-100 bg-white overflow-hidden",
+        "hidden lg:flex flex-col h-[100vh] sticky z-51 top-0 transition-all pb-2 duration-200 ease-in-out border-r border-gray-100 bg-white overflow-hidden",
         isOpen ? "w-64" : "w-20",
       )}
     >
       <div className="flex flex-col h-full p-4">
         {/* Toggle Button */}
         <div
-          className={cn("flex mb-6", isOpen ? "justify-end" : "justify-center")}
+          className={cn(
+            "flex px-2 mt-2",
+            isOpen ? "justify-between items-center" : "justify-center",
+          )}
         >
+          {isOpen && (
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <span className="text-sm font-black tracking-tighter text-[#1A1A1A] hover:cursor-pointer">
+                MA
+              </span>
+            </Link>
+          )}
           <Button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl bg-transparent hover:bg-gray-50 text-gray-400 hover:text-black transition-colors"
@@ -60,7 +70,7 @@ export default function AccountSidebar() {
           </Button>
         </div>
 
-        <nav className="flex-1 flex flex-col gap-1">
+        <nav className="flex-1 flex flex-col gap-1 pt-10">
           {sidebarLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

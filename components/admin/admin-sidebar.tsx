@@ -39,27 +39,38 @@ export function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "bg-white border-r border-[#F0F0F0] flex flex-col transition-all duration-300 ease-in-out h-screen sticky top-0 overflow-hidden",
-        isOpen ? "w-[280px]" : "w-[80px]"
+        "border-r border-gray-100 bg-white flex flex-col transition-all duration-300 ease-in-out h-screen sticky top-0 overflow-hidden",
+        isOpen ? "w-64" : "w-20",
       )}
     >
       {/* Brand Header */}
-      <div className={cn("p-6 flex items-center justify-between", !isOpen && "justify-center")}>
+      <div
+        className={cn(
+          "px-5 mt-6 flex items-center justify-between",
+          !isOpen && "justify-center",
+        )}
+      >
         {isOpen && (
-           <span className="text-sm font-black tracking-tighter text-[#1A1A1A] uppercase">
-             Admin Atlas
-           </span>
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <span className="text-sm font-black tracking-tighter text-[#1A1A1A] hover:cursor-pointer">
+              MERCHANT ATLAS
+            </span>
+          </Link>
         )}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-[#999999] hover:text-[#1A1A1A]"
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer text-[#999999] hover:text-[#1A1A1A]"
         >
-          {isOpen ? <CaretLeft size={18} weight="bold" /> : <CaretRight size={18} weight="bold" />}
+          {isOpen ? (
+            <CaretLeft size={18} weight="bold" />
+          ) : (
+            <CaretRight size={18} weight="bold" />
+          )}
         </button>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 mt-4 space-y-1 overflow-y-auto scrollbar-none">
+      <nav className="flex-1 px-3 mt-12 space-y-2 overflow-y-auto scrollbar-none">
         {MENU_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -67,20 +78,18 @@ export function AdminSidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group relative flex items-center px-4 py-3 rounded-xl transition-all duration-300",
+                "group flex items-center p-3 rounded-xl transition-all",
                 isActive
-                  ? "bg-[#1A1A1A] text-white shadow-xl shadow-black/5"
-                  : "text-[#666666] hover:bg-[#F5F5F7] hover:text-[#1A1A1A]",
-                !isOpen && "justify-center px-0"
+                  ? "bg-[#F5F5F7] text-[#1A1A1A]"
+                  : "text-[#666666] hover:bg-[#F5F5F7]/50 hover:text-[#1A1A1A]",
+                !isOpen && "justify-center",
               )}
             >
               <div className="flex items-center gap-3.5">
                 <item.icon
                   className={cn(
-                    "h-[18px] w-[18px] shrink-0 transition-colors",
-                    isActive
-                      ? "text-white"
-                      : "text-[#999999] group-hover:text-[#1A1A1A]",
+                    "h-4 w-4 shrink-0",
+                    isActive ? "text-[#1A1A1A]" : "text-[#999999]",
                   )}
                 />
                 {isOpen && (
@@ -89,7 +98,7 @@ export function AdminSidebar() {
                   </span>
                 )}
               </div>
-              
+
               {isOpen && isActive && (
                 <ChevronRight className="h-3 w-3 opacity-40 ml-auto" />
               )}
@@ -99,12 +108,17 @@ export function AdminSidebar() {
       </nav>
 
       {/* Bottom Actions */}
-      <div className={cn("p-4 space-y-2 border-t border-[#F0F0F0]", !isOpen && "flex flex-col items-center")}>
-        <Button 
-          variant="ghost" 
+      <div
+        className={cn(
+          "p-4 space-y-2 border-t border-[#F0F0F0]",
+          !isOpen && "flex flex-col items-center",
+        )}
+      >
+        <Button
+          variant="ghost"
           className={cn(
             "w-full flex items-center gap-3 px-4 py-2 text-[#999999] hover:text-[#1A1A1A] transition-colors group justify-start",
-            !isOpen && "justify-center px-0"
+            !isOpen && "justify-center px-0",
           )}
         >
           <HelpCircle className="h-4 w-4 shrink-0" />
@@ -114,11 +128,11 @@ export function AdminSidebar() {
             </span>
           )}
         </Button>
-        <Button 
+        <Button
           variant="ghost"
           className={cn(
             "w-full flex items-center gap-3 px-4 py-2 text-[#999999] hover:text-rose-600 transition-colors group justify-start",
-            !isOpen && "justify-center px-0"
+            !isOpen && "justify-center px-0",
           )}
         >
           <LogOut className="h-4 w-4 shrink-0" />

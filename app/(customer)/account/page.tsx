@@ -15,48 +15,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import AccountStatCard from "@/components/account/account-stat-card";
+import AccountPageHeader from "@/components/account/account-page-header";
 
-// Reusable Stat Card for Account Dashboard
-function AccountStatCard({
-  label,
-  value,
-  icon: Icon,
-  href,
-  className,
-}: {
-  label: string;
-  value: string | number;
-  icon: any;
-  href: string;
-  className?: string;
-}) {
-  return (
-    <Link href={href} className="block group">
-      <Card
-        className={cn(
-          "border-none bg-[#F5F5F7] transition-all duration-300 group-hover:bg-[#1A1A1A] group-hover:shadow-xl",
-          className,
-        )}
-      >
-        <CardContent className="p-6">
-          <div className="flex justify-between items-start">
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#999999] group-hover:text-white/50 transition-colors">
-                {label}
-              </h4>
-              <h2 className="text-3xl font-black tracking-tight text-[#1A1A1A] group-hover:text-white transition-colors">
-                {value}
-              </h2>
-            </div>
-            <div className="p-3 rounded-2xl bg-white text-[#1A1A1A] group-hover:bg-white/10 group-hover:text-white transition-all duration-300">
-              <Icon className="h-5 w-5" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-}
+const steps = [{ label: "Account", isCurrent: true }];
 
 const recentOrders = [
   {
@@ -92,10 +54,31 @@ export default function AccountDashboard() {
   const { user } = useAuth();
 
   return (
-    <div className="space-y-12 w-full">
-      {/* Welcome Header */}
+    <div className="space-y-12 w-full pb-10">
       <section>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 w-full">
+        <AccountPageHeader
+          title={`Welcome back, ${user?.firstName || "Monaski"}`}
+          description="Check your latest updates and manage your account settings here."
+          steps={steps}
+        >
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden sm:block">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#999999] mb-1">
+                Current Points
+              </p>
+              <p className="text-lg font-black text-[#1A1A1A]">
+                2,450 <span className="text-[10px] text-[#999999]">PTS</span>
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="h-12 px-6 rounded-xl border-[#E5E5E5] text-[11px] font-black uppercase tracking-widest hover:bg-[#1A1A1A] hover:text-white transition-all"
+            >
+              Earn More
+            </Button>
+          </div>
+        </AccountPageHeader>
+        {/*<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 w-full">
           <div>
             <h2 className="text-4xl font-black tracking-tight text-[#1A1A1A] mb-2">
               Welcome back, {user?.firstName || "Monaski"}
@@ -120,7 +103,7 @@ export default function AccountDashboard() {
               Earn More
             </Button>
           </div>
-        </div>
+        </div>*/}
       </section>
 
       {/* Stats Grid */}
@@ -169,10 +152,10 @@ export default function AccountDashboard() {
           {recentOrders.map((order) => (
             <Link
               key={order.id}
-              href={`/account/orders/${order.id.replace("#", "")}`}
+              href={`/account/orders/${order.id.replace("#", "").toLowerCase()}`}
               className="group"
             >
-              <div className="flex flex-col sm:flex-row items-center justify-between p-6 rounded-2xl bg-white border border-[#F5F5F7] group-hover:border-[#1A1A1A] group-hover:shadow-lg transition-all duration-300 gap-6">
+              <div className="flex flex-col sm:flex-row items-center justify-between p-6 rounded-2xl bg-white border border-[#F5F5F7] group-hover:border-gray-300 group-hover:shadow-md transition-all duration-300 gap-6">
                 <div className="flex items-center gap-6 w-full sm:w-auto">
                   <div className="h-12 w-12 rounded-xl bg-[#F5F5F7] flex items-center justify-center shrink-0 group-hover:bg-[#1A1A1A] group-hover:text-white transition-colors">
                     <Package className="h-5 w-5" />

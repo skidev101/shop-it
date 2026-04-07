@@ -4,9 +4,8 @@ import { Footer } from "@/components/footer";
 export default function StorefrontLayout({ children }) {
 	return (
 		<>
-			<Header /> {/* Your big, global nav */}
+			<Header />
 			<main>{children}</main>
-			<Footer />
 		</>
 	);
 }
