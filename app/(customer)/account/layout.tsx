@@ -1,5 +1,5 @@
 import AccountSidebar from "@/components/account/account-sidebar";
-import AccountHeader from "@/components/account/account-header";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 export default function AccountLayout({
   children,
@@ -11,7 +11,12 @@ export default function AccountLayout({
       <AccountSidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
-        <AccountHeader />
+        <DashboardHeader 
+          searchPlaceholder="Search orders..."
+          userName="Monaski .I"
+          userRole="Atlas Customer"
+          showCart
+        />
 
         <main className="pt-[40px] px-6 lg:px-8">{children}</main>
       </div>
