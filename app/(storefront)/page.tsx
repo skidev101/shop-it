@@ -1,10 +1,8 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ProductCard } from "@/components/product-card";
-import { Hero } from "@/components/hero";
-import { CategoryBar } from "@/components/category-bar";
+import { ProductCard } from "@/components/shared/product-card";
+import { Hero } from "@/components/shared/hero";
+import { CategoryBar } from "@/components/shared/category-bar";
 import { ChevronRight, Star, Heart, Plus } from "lucide-react";
 import Image from "next/image";
 

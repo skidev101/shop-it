@@ -1,15 +1,15 @@
 "use client";
 
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useRouter, useParams } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { 
+  ChevronLeft, 
+  Loader2, 
+  Save, 
   Plus, 
   Trash2, 
   X, 
   Image as ImageIcon, 
-  Loader2, 
-  ChevronRight, 
   Check, 
   Lightbulb,
   Bold,
@@ -17,6 +17,14 @@ import {
   List,
   Link as LinkIcon
 } from "lucide-react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { getProductById, updateProduct, getCategories } from "@/lib/api/products";
+import { toast } from "sonner";
+import Link from "next/link";
+import { UpdateProductPayload } from "@/types/product";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,9 +37,8 @@ import {
 } from "@/components/ui/field";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useState, useMemo } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -61,45 +68,60 @@ const productSchema = z.object({
   }).optional()
 });
 
-export type ProductFormValues = z.infer<typeof productSchema>;
-
-interface ProductFormProps {
-  initialData?: Partial<ProductFormValues>;
-  onSubmit: (data: ProductFormValues) => void;
-  isLoading?: boolean;
-  categories: string[];
-}
+type ProductFormValues = z.infer<typeof productSchema>;
 
 const STEPS = [
-  { id: 1, title: "General Info" },
-  { id: 2, title: "Media" },
-  { id: 3, title: "Pricing & Stock" },
-  { id: 4, title: "Shipping" },
+  { id: "general", title: "General Info", number: 1 },
+  { id: "media", title: "Media", number: 2 },
+  { id: "pricing", title: "Pricing & Stock", number: 3 },
+  { id: "shipping", title: "Shipping", number: 4 },
 ];
 
-export function ProductForm({ initialData, onSubmit, isLoading, categories }: ProductFormProps) {
+export default function ProductDetailPage() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(1);
+  const params = useParams();
+  const id = params.id as string;
+  const [activeTab, setActiveTab] = useState("general");
   const [tagInput, setTagInput] = useState("");
   const [imageInput, setImageInput] = useState("");
 
+  const { data: product, isLoading: isLoadingProduct } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductById(id),
+  });
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
+  const { mutate: handleUpdateProduct, isPending } = useMutation({
+    mutationFn: (payload: UpdateProductPayload) => updateProduct(id, payload),
+    onSuccess: () => {
+      toast.success("Product updated successfully!");
+      router.refresh();
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to update product");
+    },
+  });
+
+  const initialData = useMemo(() => {
+    if (!product) return undefined;
+    const specificationsArray = Object.entries(product.specifications || {}).map(
+      ([key, value]) => ({ key, value })
+    );
+    return {
+      ...product,
+      specifications: specificationsArray,
+      shipping: (product as any).shipping || { weight: 0, length: 0, width: 0, height: 0 },
+      sku: (product as any).sku || ""
+    };
+  }, [product]);
+
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: initialData?.name || "",
-      description: initialData?.description || "",
-      stock: initialData?.stock || 0,
-      basePrice: initialData?.basePrice || 0,
-      comparePrice: initialData?.comparePrice || undefined,
-      category: initialData?.category || "",
-      sku: initialData?.sku || "",
-      images: initialData?.images || [],
-      variants: initialData?.variants || [],
-      specifications: initialData?.specifications || [],
-      isActive: initialData?.isActive ?? true,
-      tags: initialData?.tags || [],
-      shipping: initialData?.shipping || { weight: 0, length: 0, width: 0, height: 0 }
-    }
+    values: initialData as any,
   });
 
   const { fields: variantFields, append: appendVariant, remove: removeVariant } = useFieldArray({
@@ -112,68 +134,23 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
     name: "specifications"
   });
 
-  const tags = form.watch("tags");
-  const images = form.watch("images");
+  const tags = form.watch("tags") || [];
+  const images = form.watch("images") || [];
 
-  const addTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      form.setValue("tags", [...tags, tagInput.trim()]);
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tag: string) => {
-    form.setValue("tags", tags.filter((t) => t !== tag));
-  };
-
-  const addImage = () => {
-    if (imageInput.trim() && !images.includes(imageInput.trim())) {
-      form.setValue("images", [...images, imageInput.trim()]);
-      setImageInput("");
-    }
-  };
-
-  const removeImage = (index: number) => {
-    form.setValue("images", images.filter((_, i) => i !== index));
-  };
-
-  const handleVariantOptionAdd = (vIndex: number, option: string) => {
-    const currentVariants = form.getValues("variants") || [];
-    const currentOptions = currentVariants[vIndex].options || [];
-    if (option.trim() && !currentOptions.includes(option.trim())) {
-      const updatedOptions = [...currentOptions, option.trim()];
-      form.setValue(`variants.${vIndex}.options`, updatedOptions);
-    }
-  };
-
-  const removeVariantOption = (vIndex: number, oIndex: number) => {
-    const currentVariants = form.getValues("variants") || [];
-    const currentOptions = currentVariants[vIndex].options.filter((_, i) => i !== oIndex);
-    form.setValue(`variants.${vIndex}.options`, currentOptions);
-  };
-
-  const nextStep = async () => {
-    let fieldsToValidate: any[] = [];
-    if (currentStep === 1) fieldsToValidate = ["name", "category", "description"];
-    if (currentStep === 2) fieldsToValidate = ["images"];
-    if (currentStep === 3) fieldsToValidate = ["basePrice", "stock"];
-
-    const isValid = await form.trigger(fieldsToValidate);
-    if (isValid) {
-      if (currentStep < 4) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        form.handleSubmit(onSubmit)();
+  const onSubmit = (values: ProductFormValues) => {
+    const specifications: Record<string, string> = {};
+    values.specifications.forEach((spec) => {
+      if (spec.key && spec.value) {
+        specifications[spec.key] = spec.value;
       }
-    }
-  };
+    });
 
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    } else {
-      router.back();
-    }
+    const payload: UpdateProductPayload = {
+      ...values,
+      specifications,
+    } as any;
+
+    handleUpdateProduct(payload);
   };
 
   const checklistItems = useMemo(() => [
@@ -182,48 +159,75 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
     { label: "Compelling Storytelling", checked: (form.watch("description")?.length || 0) > 50 },
   ], [form.watch("name"), form.watch("category"), form.watch("description")]);
 
+  if (isLoadingProduct) {
+    return (
+      <div className="h-[60vh] flex items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-[#4B5E7E]/40" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-10">
-      {/* Step Indicator */}
-      <div className="flex items-center justify-between max-w-4xl mx-auto lg:mx-0">
-        {STEPS.map((step) => (
-          <div 
-            key={step.id} 
-            className={cn(
-              "flex items-center gap-3 relative flex-1 last:flex-none",
-              currentStep === step.id ? "text-[#1A1A1A]" : "text-[#999999]"
-            )}
-          >
-            <div className={cn(
-              "h-9 w-9 rounded-full flex items-center justify-center text-[13px] font-black transition-all shadow-sm",
-              currentStep === step.id ? "bg-[#4B5E7E] text-white" : "bg-white border-2 border-[#F0F2F5] text-[#999999]",
-              currentStep > step.id && "bg-[#4B5E7E] text-white"
-            )}>
-              {currentStep > step.id ? <Check className="h-4 w-4" /> : step.id}
-            </div>
-            <span className="text-[13px] font-black uppercase tracking-widest whitespace-nowrap hidden sm:block">{step.title}</span>
-            {step.id < 4 && (
-              <div className="mx-4 h-[2px] flex-1 bg-[#F0F2F5] min-w-[20px] hidden sm:block">
-                <div 
-                  className={cn(
-                    "h-full bg-[#4B5E7E] transition-all duration-500",
-                    currentStep > step.id ? "w-full" : "w-0"
-                  )} 
-                />
-              </div>
-            )}
+    <div className="space-y-10 max-w-7xl mx-auto">
+      {/* Header with Save Button */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-6">
+          <Link href="/vendor/products" className="group flex items-center gap-2 text-[#999999] hover:text-[#1A1A1A] transition-colors w-fit">
+            <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Back to Products</span>
+          </Link>
+          <div>
+            <h1 className="text-[40px] font-black tracking-tight text-[#1A1A1A] leading-tight">
+              {product?.name}
+            </h1>
+            <p className="text-[16px] text-[#999999] font-medium mt-2">
+              Populate the global catalog with your curated offerings.
+            </p>
           </div>
-        ))}
+        </div>
+        <Button 
+          type="button" 
+          onClick={form.handleSubmit(onSubmit)}
+          disabled={isPending}
+          className="h-14 px-10 rounded-2xl bg-[#4B5E7E] text-white hover:bg-[#3B4A63] font-black uppercase tracking-widest gap-3 shadow-xl shadow-[#4B5E7E]/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+        >
+          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Save className="h-5 w-5" />}
+          Save Changes
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Main Content */}
-        <div className="lg:col-span-8 space-y-8">
-          <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white overflow-visible rounded-[32px]">
-            <CardContent className="p-8 md:p-10">
-              <form className="space-y-8">
-                {currentStep === 1 && (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-10">
+        <TabsList className="bg-transparent h-auto p-0 flex items-center justify-between max-w-4xl w-full">
+          {STEPS.map((step) => (
+            <TabsTrigger 
+              key={step.id} 
+              value={step.id}
+              className={cn(
+                "p-0 bg-transparent flex items-center gap-3 relative flex-1 last:flex-none border-none data-[state=active]:bg-transparent shadow-none",
+                activeTab === step.id ? "text-[#1A1A1A]" : "text-[#999999]"
+              )}
+            >
+              <div className={cn(
+                "h-9 w-9 rounded-full flex items-center justify-center text-[13px] font-black transition-all shadow-sm shrink-0",
+                activeTab === step.id ? "bg-[#4B5E7E] text-white" : "bg-white border-2 border-[#F0F2F5] text-[#999999]"
+              )}>
+                {step.number}
+              </div>
+              <span className="text-[13px] font-black uppercase tracking-widest whitespace-nowrap hidden sm:block">{step.title}</span>
+              {step.number < 4 && (
+                <div className="mx-4 h-[2px] flex-1 bg-[#F0F2F5] min-w-[20px] hidden sm:block" />
+              )}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          {/* Main Content */}
+          <div className="lg:col-span-8 space-y-8">
+            <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white overflow-visible rounded-[32px]">
+              <CardContent className="p-8 md:p-10">
+                <form className="space-y-8">
+                  <TabsContent value="general" className="mt-0 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <Field>
                       <FieldLabel className="text-[11px] font-black uppercase tracking-[0.2em] text-[#999999] mb-4">Product Title</FieldLabel>
                       <FieldContent>
@@ -286,11 +290,9 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         <FieldError errors={[form.formState.errors.description]} />
                       </FieldContent>
                     </Field>
-                  </div>
-                )}
+                  </TabsContent>
 
-                {currentStep === 2 && (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <TabsContent value="media" className="mt-0 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <div className="space-y-6">
                       <FieldLabel className="text-[11px] font-black uppercase tracking-[0.2em] text-[#999999]">Product Images</FieldLabel>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -300,7 +302,10 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                               <button
                                 type="button"
-                                onClick={() => removeImage(idx)}
+                                onClick={() => {
+                                  const current = form.getValues("images");
+                                  form.setValue("images", current.filter((_, i) => i !== idx));
+                                }}
                                 className="h-10 w-10 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center hover:bg-destructive hover:text-white transition-all transform scale-90 group-hover:scale-100"
                               >
                                 <X className="h-5 w-5" />
@@ -330,7 +335,13 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         <Button 
                           type="button" 
                           variant="outline" 
-                          onClick={addImage}
+                          onClick={() => {
+                            if (imageInput.trim()) {
+                              const current = form.getValues("images") || [];
+                              form.setValue("images", [...current, imageInput.trim()]);
+                              setImageInput("");
+                            }
+                          }}
                           className="h-14 px-8 rounded-2xl border-[#E5E7EB] font-black uppercase tracking-widest text-[11px] hover:bg-[#1A1A1A] hover:text-white transition-colors"
                         >
                           Import
@@ -354,7 +365,7 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                       </div>
                       <div className="space-y-4">
                         {specFields.map((field, index) => (
-                          <div key={field.id} className="flex gap-4 items-start animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${index * 50}ms` }}>
+                          <div key={field.id} className="flex gap-4 items-start animate-in slide-in-from-left-4 duration-300">
                             <Input 
                               placeholder="e.g. Material" 
                               {...form.register(`specifications.${index}.key` as const)}
@@ -378,11 +389,9 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         ))}
                       </div>
                     </div>
-                  </div>
-                )}
+                  </TabsContent>
 
-                {currentStep === 3 && (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <TabsContent value="pricing" className="mt-0 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <Field>
                         <FieldLabel className="text-[11px] font-black uppercase tracking-[0.2em] text-[#999999] mb-4">Base Price ($)</FieldLabel>
@@ -479,7 +488,10 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                                     {option}
                                     <button 
                                       type="button" 
-                                      onClick={() => removeVariantOption(index, oIndex)}
+                                      onClick={() => {
+                                        const current = form.getValues(`variants.${index}.options`);
+                                        form.setValue(`variants.${index}.options`, current.filter((_, i) => i !== oIndex));
+                                      }}
                                       className="opacity-50 hover:opacity-100"
                                     >
                                       <X className="h-3 w-3" />
@@ -492,8 +504,12 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                                 onKeyDown={(e) => {
                                   if (e.key === 'Enter') {
                                     e.preventDefault();
-                                    handleVariantOptionAdd(index, (e.target as HTMLInputElement).value);
-                                    (e.target as HTMLInputElement).value = "";
+                                    const val = (e.target as HTMLInputElement).value;
+                                    if (val.trim()) {
+                                      const current = form.getValues(`variants.${index}.options`) || [];
+                                      form.setValue(`variants.${index}.options`, [...current, val.trim()]);
+                                      (e.target as HTMLInputElement).value = "";
+                                    }
                                   }
                                 }}
                                 className="bg-white border-none rounded-xl h-14 px-5 font-medium shadow-sm"
@@ -503,11 +519,9 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         ))}
                       </div>
                     </div>
-                  </div>
-                )}
+                  </TabsContent>
 
-                {currentStep === 4 && (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <TabsContent value="shipping" className="mt-0 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <Field>
                         <FieldLabel className="text-[11px] font-black uppercase tracking-[0.2em] text-[#999999] mb-4">Weight (kg)</FieldLabel>
@@ -552,7 +566,13 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         {tags.map((tag) => (
                           <Badge key={tag} className="bg-[#1A1A1A] text-white hover:bg-[#333333] px-4 py-2 rounded-xl font-bold gap-3 shadow-md">
                             {tag}
-                            <button type="button" onClick={() => removeTag(tag)}>
+                            <button 
+                              type="button" 
+                              onClick={() => {
+                                const current = form.getValues("tags");
+                                form.setValue("tags", current.filter((t) => t !== tag));
+                              }}
+                            >
                               <X className="h-3.5 w-3.5" />
                             </button>
                           </Badge>
@@ -566,7 +586,11 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault();
-                              addTag();
+                              if (tagInput.trim()) {
+                                const current = form.getValues("tags") || [];
+                                form.setValue("tags", [...current, tagInput.trim()]);
+                                setTagInput("");
+                              }
                             }
                           }}
                           className="h-16 rounded-2xl bg-[#F9FAFB] border-none px-6 font-medium"
@@ -574,102 +598,82 @@ export function ProductForm({ initialData, onSubmit, isLoading, categories }: Pr
                         <Button 
                           type="button" 
                           variant="outline" 
-                          onClick={addTag}
+                          onClick={() => {
+                            if (tagInput.trim()) {
+                              const current = form.getValues("tags") || [];
+                              form.setValue("tags", [...current, tagInput.trim()]);
+                              setTagInput("");
+                            }
+                          }}
                           className="h-16 px-8 rounded-2xl border-[#E5E7EB] font-black uppercase tracking-widest text-[11px] hover:bg-[#1A1A1A] hover:text-white transition-colors"
                         >
                           Add
                         </Button>
                       </div>
                     </div>
-                  </div>
-                )}
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Footer Navigation */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6">
-            <button 
-              type="button"
-              onClick={prevStep}
-              className="text-[13px] font-black uppercase tracking-widest text-[#1A1A1A] hover:opacity-60 transition-opacity"
-            >
-              {currentStep === 1 ? "Cancel & Exit" : "Back to Previous"}
-            </button>
-            <Button 
-              type="button" 
-              onClick={nextStep}
-              disabled={isLoading}
-              className="w-full sm:w-auto h-16 px-12 rounded-[24px] bg-[#4B5E7E] text-white hover:bg-[#3B4A63] font-black uppercase tracking-widest text-[12px] gap-4 shadow-xl shadow-[#4B5E7E]/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <>
-                  {currentStep === 4 ? "Publish Product" : `Next: ${STEPS[currentStep].title}`}
-                  <ChevronRight className="h-5 w-5" />
-                </>
-              )}
-            </Button>
+                  </TabsContent>
+                </form>
+              </CardContent>
+            </Card>
           </div>
-        </div>
 
-        {/* Sidebar Info */}
-        <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
-          <Card className="border-none shadow-none bg-[#F3F6FA] rounded-[32px] p-10">
-            <div className="space-y-8">
-              <div className="flex gap-6">
-                <div className="h-12 w-12 shrink-0 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-                  <Lightbulb className="h-6 w-6 text-[#4B5E7E]" />
-                </div>
-                <div>
-                  <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-[#1A1A1A] mb-3">Pro Tip</h4>
-                  <p className="text-[15px] text-[#4B5E7E] font-medium leading-relaxed opacity-90">
-                    Items with detailed descriptions (at least 200 words) see a 40% higher conversion rate. Mention the history or inspiration to engage collectors.
-                  </p>
+          {/* Sidebar Info */}
+          <div className="lg:col-span-4 space-y-8 animate-in fade-in slide-in-from-right-8 duration-700">
+            <Card className="border-none shadow-none bg-[#F3F6FA] rounded-[32px] p-10">
+              <div className="space-y-8">
+                <div className="flex gap-6">
+                  <div className="h-12 w-12 shrink-0 rounded-2xl bg-white flex items-center justify-center shadow-sm">
+                    <Lightbulb className="h-6 w-6 text-[#4B5E7E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-[#1A1A1A] mb-3">Pro Tip</h4>
+                    <p className="text-[15px] text-[#4B5E7E] font-medium leading-relaxed opacity-90">
+                      Items with detailed descriptions (at least 200 words) see a 40% higher conversion rate. Mention the history or inspiration to engage collectors.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          <Card className="border-none shadow-none bg-[#F9FAFB] rounded-[32px] p-10">
-            <div className="space-y-8">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-[#1A1A1A]">Quality Checklist</h4>
-              <div className="space-y-6">
-                {checklistItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 group">
-                    <div className={cn(
-                      "h-7 w-7 rounded-full flex items-center justify-center transition-all duration-300 transform group-hover:scale-110",
-                      item.checked ? "bg-[#4B5E7E] text-white shadow-md shadow-[#4B5E7E]/20" : "border-2 border-[#E5E7EB] bg-white"
-                    )}>
-                      {item.checked && <Check className="h-4 w-4" />}
+            <Card className="border-none shadow-none bg-[#F9FAFB] rounded-[32px] p-10">
+              <div className="space-y-8">
+                <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-[#1A1A1A]">Quality Checklist</h4>
+                <div className="space-y-6">
+                  {checklistItems.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-4 group">
+                      <div className={cn(
+                        "h-7 w-7 rounded-full flex items-center justify-center transition-all duration-300 transform group-hover:scale-110",
+                        item.checked ? "bg-[#4B5E7E] text-white shadow-md shadow-[#4B5E7E]/20" : "border-2 border-[#E5E7EB] bg-white"
+                      )}>
+                        {item.checked && <Check className="h-4 w-4" />}
+                      </div>
+                      <span className={cn(
+                        "text-[15px] font-bold transition-colors duration-300",
+                        item.checked ? "text-[#1A1A1A]" : "text-[#999999]"
+                      )}>
+                        {item.label}
+                      </span>
                     </div>
-                    <span className={cn(
-                      "text-[15px] font-bold transition-colors duration-300",
-                      item.checked ? "text-[#1A1A1A]" : "text-[#999999]"
-                    )}>
-                      {item.label}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden group shadow-2xl shadow-black/10">
-            <img 
-              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800" 
-              alt="Excellence" 
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-90" />
-            <div className="absolute inset-0 flex flex-col justify-end p-10">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-3">Curation Standards</span>
-              <h4 className="text-white font-black uppercase tracking-widest text-2xl leading-tight">Excellence in Presentation</h4>
+            <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden group shadow-2xl shadow-black/10">
+              <img 
+                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800" 
+                alt="Excellence" 
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-90" />
+              <div className="absolute inset-0 flex flex-col justify-end p-10">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-3">Curation Standards</span>
+                <h4 className="text-white font-black uppercase tracking-widest text-2xl leading-tight">Excellence in Presentation</h4>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Tabs>
     </div>
   );
 }

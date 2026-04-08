@@ -63,9 +63,7 @@ export default function EditProductPage() {
     const payload: UpdateProductPayload = {
       ...values,
       specifications,
-      // For update, we might need to handle images differently if the backend expects removeImageIds
-      // but for now we send the whole payload as per the instructions
-    };
+    } as any;
 
     handleUpdateProduct(payload);
   };
@@ -73,28 +71,26 @@ export default function EditProductPage() {
   if (isLoadingProduct) {
     return (
       <div className="h-[60vh] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary/40" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#4B5E7E]/40" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-10 max-w-6xl mx-auto">
+    <div className="space-y-10 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Link href="/vendor/products" className="group flex items-center gap-2 text-[#999999] hover:text-[#1A1A1A] transition-colors w-fit">
           <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-          <span className="text-[12px] font-black uppercase tracking-widest">Back to Products</span>
+          <span className="text-[11px] font-black uppercase tracking-[0.2em]">Back to Products</span>
         </Link>
-        <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-[32px] font-black tracking-tight text-[#1A1A1A]">
-              Edit Product
-            </h1>
-            <p className="text-[14px] text-[#999999] font-medium mt-1">
-              Update "{product?.name}" details and inventory.
-            </p>
-          </div>
+        <div>
+          <h1 className="text-[40px] font-black tracking-tight text-[#1A1A1A] leading-tight">
+            Edit Product
+          </h1>
+          <p className="text-[16px] text-[#999999] font-medium mt-2">
+            Refine "{product?.name}" details and optimize listing.
+          </p>
         </div>
       </div>
 

@@ -1,3 +1,4 @@
+"use client";
 import { useCartStore } from "@/stores/cart-store";
 import { useEffect, useMemo, useState } from "react";
 

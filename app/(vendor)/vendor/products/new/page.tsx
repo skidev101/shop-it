@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ProductForm, ProductFormValues } from "@/components/vendor/product-form";
 import { createProduct, getCategories } from "@/lib/api/products";
 import { toast } from "sonner";
@@ -42,28 +41,26 @@ export default function NewProductPage() {
     const payload: ProductPayload = {
       ...values,
       specifications,
-    };
+    } as any; // Cast for now as SKU and shipping aren't in payload type yet
 
     handleCreateProduct(payload);
   };
 
   return (
-    <div className="space-y-10 max-w-6xl mx-auto">
+    <div className="space-y-10 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Link href="/vendor/products" className="group flex items-center gap-2 text-[#999999] hover:text-[#1A1A1A] transition-colors w-fit">
           <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-          <span className="text-[12px] font-black uppercase tracking-widest">Back to Products</span>
+          <span className="text-[11px] font-black uppercase tracking-[0.2em]">Back to Products</span>
         </Link>
-        <div className="flex items-end justify-between">
-          <div>
-            <h1 className="text-[32px] font-black tracking-tight text-[#1A1A1A]">
-              Create New Product
-            </h1>
-            <p className="text-[14px] text-[#999999] font-medium mt-1">
-              List a new item in your store's inventory.
-            </p>
-          </div>
+        <div>
+          <h1 className="text-[40px] font-black tracking-tight text-[#1A1A1A] leading-tight">
+            Create New Product
+          </h1>
+          <p className="text-[16px] text-[#999999] font-medium mt-2">
+            Populate the global catalog with your curated offerings.
+          </p>
         </div>
       </div>
 
