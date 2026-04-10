@@ -1,5 +1,3 @@
-"use client";
-
 import { Bell, Check, ShoppingCart, Star, UserPlus, Inbox } from "lucide-react";
 import {
   DropdownMenu,
@@ -58,7 +56,7 @@ export function NotificationsPanel() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="end"
+        align="left"
         className="w-80 overflow-hidden rounded-xl border-border/40 shadow-lg"
       >
         <div className="flex items-center justify-between px-4 py-3">
@@ -66,13 +64,16 @@ export function NotificationsPanel() {
             Notifications
           </DropdownMenuLabel>
           {unreadCount > 0 && (
-            <Badge variant="secondary" className="px-1.5 py-0 h-4 text-[10px] font-bold">
+            <Badge
+              variant="secondary"
+              className="px-1.5 py-0 h-4 text-[10px] font-bold"
+            >
               {unreadCount} NEW
             </Badge>
           )}
         </div>
         <DropdownMenuSeparator className="m-0" />
-        
+
         <div className="max-h-[380px] overflow-y-auto py-1">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
@@ -80,13 +81,17 @@ export function NotificationsPanel() {
                 key={notification.id}
                 className={cn(
                   "flex items-start gap-3 p-3 transition-colors cursor-pointer mx-1 my-0.5 rounded-lg focus:bg-accent/50",
-                  notification.unread && "bg-accent/30"
+                  notification.unread && "bg-accent/30",
                 )}
               >
-                <div className={cn(
-                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/10",
-                  notification.unread ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
-                )}>
+                <div
+                  className={cn(
+                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/10",
+                    notification.unread
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted text-muted-foreground",
+                  )}
+                >
                   <notification.icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1 space-y-1">
@@ -110,11 +115,13 @@ export function NotificationsPanel() {
           ) : (
             <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
               <Inbox className="h-8 w-8 text-muted-foreground/30 mb-2" />
-              <p className="text-sm font-medium text-muted-foreground">No notifications yet</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                No notifications yet
+              </p>
             </div>
           )}
         </div>
-        
+
         <DropdownMenuSeparator className="m-0" />
         <div className="p-2">
           <Button

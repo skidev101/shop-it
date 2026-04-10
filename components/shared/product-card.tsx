@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Heart, ShoppingBag, Star, User } from "lucide-react";
 import { Button } from "../ui/button";
