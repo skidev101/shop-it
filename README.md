@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShopIt
 
-## Getting Started
+ShopIt is a modern e-commerce platform built for marketplaces that connect buyers with independent artisans and vendors. It handles everything from product discovery and cart management to secure checkout and a full-featured admin console. The app is ready to use as a foundation for a multi-vendor store or a custom commerce experience.
 
-First, run the development server:
+## Installation
+
+Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/skidev101/shop-it.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate into the project directory:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd shop-it
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies with pnpm:
 
-## Learn More
+```bash
+pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-## Deploy on Vercel
+## Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Once the development server is running, you can explore the main storefront, sign in with a mock account, browse products, add items to the cart, and complete a checkout flow using the built-in developer sandbox.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The checkout page includes a Developer Sandbox mode with three options:
+
+- Live (Express API)
+- Mock Success
+- Mock Error
+
+Use Mock Success to simulate a completed payment and see the order confirmation page. Use Mock Error to test how failed payments are handled.
+
+The admin dashboard is available at [http://localhost:3000/admin/dashboard](http://localhost:3000/admin/dashboard). It provides a preview of KPIs, merchant approvals, payouts, inventory, and system alerts.
+
+The customer account area is available at [http://localhost:3000/account](http://localhost:3000/account). It shows order history, wishlist, shipping addresses, and profile settings.
+
+## Features
+
+- Multi-role experience with storefront, customer portal, and admin console
+- Product discovery with categories, vendor directories, and search
+- Persistent shopping cart with quantity updates and total calculations
+- Checkout flow with shipping details, order review, and payment integration (Paystack)
+- Developer sandbox for testing success and error payment states
+- Customer account dashboard with order history, order details, wishlist, addresses, and profile
+- Admin analytics with KPIs, category performance, user acquisition, and device usage
+- Admin inventory management with stock status, vendor tracking, and compliance warnings
+- Admin merchant management with onboarding, verification, and storefront quick actions
+- Admin financial overview with recent transactions and payout statuses
+- System audit logs for administrative actions
+- Authentication pages for login, registration, password reset, and OTP verification
+- Responsive design with dark mode support (from CSS variables, if enabled)
+- Clean UI components built with Radix UI and Tailwind CSS
+
+## Technologies Used
+
+| Technology | Description | Link |
+|------------|-------------|------|
+| Next.js 16 | React framework for server-rendered and static applications | [nextjs.org](https://nextjs.org) |
+| React 19 | JavaScript library for building user interfaces | [react.dev](https://react.dev) |
+| TypeScript | Typed superset of JavaScript | [typescriptlang.org](https://www.typescriptlang.org) |
+| Tailwind CSS v4 | Utility-first CSS framework | [tailwindcss.com](https://tailwindcss.com) |
+| shadcn | Reusable component primitives built on Radix UI | [ui.shadcn.com](https://ui.shadcn.com) |
+| Zustand | Lightweight state management | [zustand.docs.pmnd.rs](https://zustand.docs.pmnd.rs) |
+| TanStack Query | Data fetching and caching | [tanstack.com/query](https://tanstack.com/query) |
+| Axios | HTTP client for API requests | [axios-http.com](https://axios-http.com) |
+| React Hook Form | Form validation and handling | [react-hook-form.com](https://react-hook-form.com) |
+| Zod | Schema validation | [zod.dev](https://zod.dev) |
+| Radix UI | Headless UI primitives | [radix-ui.com](https://www.radix-ui.com) |
+| Lucide React | Icon library | [lucide.dev](https://lucide.dev) |
+| Phosphor Icons | Icon library | [phosphoricons.com](https://phosphoricons.com) |
+
+## Author Info
+
+- X (Twitter): [@monaski_](https://x.com/monaski_)
+
+## Badges
+
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-593D88?style=for-the-badge&logo=zustand&logoColor=white)](https://zustand.docs.pmnd.rs/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/skidev101/shop-it)
+
+[![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://dokugen.samueltuoyo.com)
